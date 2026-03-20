@@ -2,6 +2,7 @@ package com.myhons.sensic
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -46,6 +47,12 @@ class ContextsMenu : AppCompatActivity() {
             finish()
         }
 
+        btnTime.setOnClickListener {
+            loadScreen("Time", "Time")
+        }
+
+
+
         val allViews = arrayOf(viewMood, viewMovement, viewWeather)
         for(view in allViews)
         {
@@ -63,7 +70,6 @@ class ContextsMenu : AppCompatActivity() {
 
         // Maps each dropdown button to the view that displays and hides them.
         val dropdowns = mapOf(btnMoods to viewMood, btnMovement to viewMovement, btnWeather to viewWeather)
-
         //
         for(button in dropdowns)
         {

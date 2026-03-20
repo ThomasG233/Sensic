@@ -13,9 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sensic">
         <activity
-            android:name=".TimeContext"
-            android:exported="false" />
-        <activity
             android:name=".AdjustContext"
             android:exported="false" />
         <activity
