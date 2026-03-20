@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MoodSelect">
+
+    <Button
+        android:id="@+id/btnAngry"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="175dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#B10202"
+        android:fontFamily="sans-serif-black"
+        android:text="Angry"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnExhausted"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnAnxious"
+        app:layout_constraintTop_toBottomOf="@+id/btnSad"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnExhausted"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="175dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#755F5F"
+        android:fontFamily="sans-serif-black"
+        android:text="Exhausted"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnEnergised"
+        app:layout_constraintTop_toBottomOf="@+id/btnAngry" />
+
+    <Button
+        android:id="@+id/btnSad"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="175dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#3F51B5"
+        android:fontFamily="sans-serif-black"
+        android:text="Sad"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnHappy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnHappy"
+        app:layout_constraintTop_toTopOf="@+id/btnHappy"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/moodLabel"
+        android:layout_width="359dp"
+        android:layout_height="wrap_content"
+        android:text="How are you feeling?"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.19" />
+
+    <Button
+        android:id="@+id/btnHappy"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="175dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#007605"
+        android:fontFamily="sans-serif"
+        android:text="Happy"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btnSad"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moodLabel" />
+
+    <TextView
+        android:id="@+id/moodLabel2"
+        android:layout_width="355dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="4dp"
+        android:singleLine="false"
+        android:text="We'll try to find you something to fit with your mood and preferences."
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnExhausted" />
+
+    <Button
+        android:id="@+id/btnEnergised"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="175dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#8BC34A"
+        android:fontFamily="sans-serif-black"
+        android:text="Energised"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btnExhausted"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAnxious" />
+
+    <Button
+        android:id="@+id/btnAnxious"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="175dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#B86E00"
+        android:fontFamily="sans-serif-black"
+        android:text="Anxious"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnEnergised"
+        app:layout_constraintEnd_toStartOf="@+id/btnAngry"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnHappy"
+        app:layout_constraintVertical_bias="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

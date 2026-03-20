@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Sensic</string>
+    <string name="Information">Sensic is a Context-Aware Music Application designed to take in your current contexts, such as your mood, location, weather and activity. Based on this information and your own preferences provided to the app, the music played will aim to be tailored towards what you want to hear in these given contexts.</string>
+    <string name="Instructions">"To tailor the experience to fit your tastes, you can start by editing contexts to align closer to what you'll want to hear. By providing this information, the application can build up an understanding of your listening preferences. Once you're satisfied with the edits you've made, you can tap 'Start Listening' in order to play recommended music."</string>
+    <string name="Disclaimer">"Please note that you require a pre-existing Spotify subscription in order to use this application. Due to this application accessing Spotify to get recommendations, you may need to authenticate. "</string>
+    <string name="title_activity_authentication">Authentication</string>
+
+    <string-array name="Genres">
+        <item>Genre1</item>
+        <item>Genre2</item>
+        <item>Genre3</item>
+        <item>Genre4</item>
+        <item>Genre5</item>
+        <item>Genre6</item>
+        <item>Genre7</item>
+        <item>Genre8</item>
+    </string-array>
+</resources>

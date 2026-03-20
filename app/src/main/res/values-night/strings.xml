@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Information">Sensic is a Context-Aware Music Application designed to take in your current contexts, such as your mood, location, weather and activity. Based on this information, the music played by the app will be tailored towards what you want to hear in these given contexts.</string>
+</resources>
