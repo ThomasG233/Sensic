@@ -51,7 +51,9 @@ class ContextsMenu : AppCompatActivity() {
             loadScreen("Time", "Time")
         }
 
-
+        btnLocations.setOnClickListener {
+            loadScreen("Location", "Location")
+        }
 
         val allViews = arrayOf(viewMood, viewMovement, viewWeather)
         for(view in allViews)

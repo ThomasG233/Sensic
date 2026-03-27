@@ -36,9 +36,6 @@ class MainScreen : AppCompatActivity() {
             val redirectUri = PKCEHandler.getRedirectUri()
             val challenge = PKCEHandler.getCodeChallenge(64)
 
-            Log.e("AUTH", "Challenge: $challenge")
-            Log.e("AUTH", "Verifier: ${PKCEHandler.getCodeVerifier()}")
-
             val authenticateIntent = Intent(Intent.ACTION_VIEW,
                 ("https://accounts.spotify.com/authorize?response_type=code&client_id=$clientID" +
                         "&code_challenge_method=S256" +
