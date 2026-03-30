@@ -1,6 +1,5 @@
 package com.myhons.sensic
 
-import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.SecureRandom
 import android.util.Base64
@@ -61,7 +60,6 @@ object PKCEHandler
      * @param codeLength, the desired length of the code challenge.
      * @return the verifier; a completely random string (64 characters in length)
      */
-    @Throws(UnsupportedEncodingException::class)
     private fun generateCodeVerifier(codeLength : Int) : String
     {
         val rdm = SecureRandom()
@@ -74,7 +72,6 @@ object PKCEHandler
     /**
      * Generates the code challenge using the code verifier, hashed using SHA-256.
      */
-    @Throws(UnsupportedEncodingException::class)
     private fun generateCodeChallenge(codeVerifier : String) : String
     {
         val bytes = codeVerifier.toByteArray(charset("US-ASCII"))

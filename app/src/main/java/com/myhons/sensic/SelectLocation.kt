@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.location.Geocoder.GeocodeListener
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -16,7 +15,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.graphics.vector.Path
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -58,8 +56,8 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
 
 
         btnConfirmLocation.setOnClickListener {
-            var coordinates = intent.putExtra("latitude", coordsToReturn.latitude)
-            coordinates = intent.putExtra("longitude", coordsToReturn.longitude)
+            intent.putExtra("latitude", coordsToReturn.latitude)
+            intent.putExtra("longitude", coordsToReturn.longitude)
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -113,7 +111,7 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
         ) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 101
             )
         }

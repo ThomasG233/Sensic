@@ -38,8 +38,6 @@ class AppSettings : AppCompatActivity() {
         btnBack = findViewById(R.id.btnBack)
         switchTheme = findViewById(R.id.switchTheme)
 
-        sharedPreferences = getSharedPreferences("darkTheme", MODE_PRIVATE)
-
         if(sharedPreferences.getBoolean("darkTheme", false))
         {
             switchTheme.isChecked = true

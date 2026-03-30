@@ -16,7 +16,7 @@
         app:layout_constraintTop_toBottomOf="@+id/genres">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -60,103 +60,103 @@
         app:layout_constraintTop_toBottomOf="@+id/viewTimeOptions">
 
         <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbChill"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre1"
+            android:text="Chill"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
-            android:id="@+id/checkBox4"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbClassical"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre3"
-            app:layout_constraintStart_toStartOf="@+id/checkBox3"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox3" />
+            android:text="Classical"
+            app:layout_constraintStart_toStartOf="@+id/cbChill"
+            app:layout_constraintTop_toBottomOf="@+id/cbChill" />
 
         <CheckBox
-            android:id="@+id/checkBox5"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbEDM"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre4"
-            app:layout_constraintStart_toStartOf="@+id/checkBox4"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox4" />
+            android:text="EDM"
+            app:layout_constraintStart_toStartOf="@+id/cbClassical"
+            app:layout_constraintTop_toBottomOf="@+id/cbClassical" />
 
         <CheckBox
-            android:id="@+id/checkBox6"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbDance"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre6"
+            android:text="Dance"
+            app:layout_constraintStart_toStartOf="@+id/cbEDM"
+            app:layout_constraintTop_toBottomOf="@+id/cbEDM" />
+
+        <CheckBox
+            android:id="@+id/cbFolk"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="0dp"
+            android:text="Folk"
+            app:layout_constraintStart_toStartOf="@+id/cbDance"
+            app:layout_constraintTop_toBottomOf="@+id/cbDance" />
+
+        <CheckBox
+            android:id="@+id/cbKPop"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="0dp"
+            android:text="K-Pop"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
+            app:layout_constraintTop_toBottomOf="@+id/cbFolk" />
 
         <CheckBox
-            android:id="@+id/checkBox7"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbLofi"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre8"
+            android:text="Lo-Fi"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox8" />
+            app:layout_constraintTop_toBottomOf="@+id/cbKPop" />
 
         <CheckBox
-            android:id="@+id/checkBox9"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbMetal"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre9"
+            android:text="Metal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox7" />
+            app:layout_constraintTop_toBottomOf="@+id/cbLofi" />
 
         <CheckBox
-            android:id="@+id/checkBox10"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbPop"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre9"
+            android:text="Pop"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox9" />
+            app:layout_constraintTop_toBottomOf="@+id/cbMetal" />
 
         <CheckBox
-            android:id="@+id/checkBox12"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbRock"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre10"
+            android:text="Rock"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox10" />
+            app:layout_constraintTop_toBottomOf="@+id/cbPop" />
 
         <CheckBox
-            android:id="@+id/checkBox8"
-            android:layout_width="wrap_content"
+            android:id="@+id/cbSleep"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:paddingLeft="0dp"
-            android:text="Genre7"
+            android:text="Sleep"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox6" />
-
-        <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="0dp"
-            android:text="Genre5"
-            app:layout_constraintStart_toStartOf="@+id/checkBox5"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox5" />
-
-        <CheckBox
-            android:id="@+id/checkBox3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="0dp"
-            android:text="Genre2"
-            app:layout_constraintStart_toStartOf="@+id/checkBox"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+            app:layout_constraintTop_toBottomOf="@+id/cbRock" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -232,6 +232,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:text="Select Location"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

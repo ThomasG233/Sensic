@@ -2,7 +2,6 @@ package com.myhons.sensic
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,10 +21,10 @@ class MainScreen : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main_screen)
 
-        btnStart = findViewById<Button>(R.id.btnStart)
-        btnAuth = findViewById<Button>(R.id.btnAuth)
-        btnSettings = findViewById<Button>(R.id.btnSettings)
-        btnContexts = findViewById<Button>(R.id.btnContexts)
+        btnStart = findViewById(R.id.btnStart)
+        btnAuth = findViewById(R.id.btnAuth)
+        btnSettings = findViewById(R.id.btnSettings)
+        btnContexts = findViewById(R.id.btnContexts)
         btnStart.setOnClickListener {
             val intent = Intent(this, MusicPlayer::class.java)
             startActivity(intent)

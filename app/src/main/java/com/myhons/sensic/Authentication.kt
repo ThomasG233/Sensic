@@ -20,9 +20,9 @@ import java.nio.charset.StandardCharsets
 private lateinit var sharedPreferences : SharedPreferences
 private lateinit var accessToken : String
 
-private var expiresIn = 0
-
-// Checks to see if the callback URI is called by Spotify.
+/**
+ * Checks to see if the callback URI is called by Spotify.
+ */
 class Authentication : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +77,7 @@ class Authentication : AppCompatActivity() {
     }
 
     // Adapted from https://stackoverflow.com/questions/63876345/how-to-get-access-token-from-spotify-api
-    suspend fun getAccessToken(authCode: String) {
+    fun getAccessToken(authCode: String) {
         // Get all needed parameters from the PKCEHandler needed in the post request.
         val verifier = PKCEHandler.getCodeVerifier()
         val redirectUri = PKCEHandler.getRedirectUri()
