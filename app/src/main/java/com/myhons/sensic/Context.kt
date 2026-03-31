@@ -35,6 +35,10 @@ class LocationContext(
     {
         this.coordinates = Coordinates(latitude, longitude)
     }
+    fun setCoordinates(coordinates : Coordinates)
+    {
+        this.coordinates = coordinates
+    }
     fun getCoordinates() : Coordinates
     {
         return coordinates

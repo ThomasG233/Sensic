@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.Geocoder.GeocodeListener
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -32,14 +33,14 @@ import java.util.Locale
 // Implemented based on this tutorial: https://www.youtube.com/watch?v=JzxjNNCYt_o and https://www.youtube.com/watch?v=dcJ5DqYqBNA
 class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var currentLocation : Location
     private lateinit var gMap : GoogleMap
     private lateinit var map : FrameLayout
     private lateinit var btnConfirmLocation : Button
     private lateinit var fusedClient : FusedLocationProviderClient
     private lateinit var searchView : SearchView
-    private var geoCoder = Geocoder(this@SelectLocation, Locale.getDefault())
+    private var geoCoder = Geocoder(this, Locale.getDefault())
     private var coordsToReturn = LatLng(0.0,0.0)
+    private var locationName = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,11 +52,29 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
         map = findViewById(R.id.map)
         searchView = findViewById(R.id.searchView)
 
+        val savedCoordinates = ContextsHandler.getContext<LocationContext>("Location", "Location").getCoordinates()
+        coordsToReturn = LatLng(savedCoordinates.getLatitude(), savedCoordinates.getLongitude())
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
-        getLocation()
-
+        if(coordsToReturn.latitude == 0.0 && coordsToReturn.longitude == 0.0)
+        {
+            getLocation()
+        }
+        else
+        {
+            val location = geoCoder.getFromLocation(coordsToReturn.latitude, coordsToReturn.longitude, 1) as List<Address>
+            if(location.isNotEmpty())
+            {
+                locationName = getLocationLabel(location[0])
+            }
+            else
+            {
+                locationName = "Selected Location"
+            }
+            initialiseMap()
+        }
 
         btnConfirmLocation.setOnClickListener {
+            ContextsHandler.getContext<LocationContext>("Location", "Location").setCoordinates(coordsToReturn.latitude, coordsToReturn.longitude)
             intent.putExtra("latitude", coordsToReturn.latitude)
             intent.putExtra("longitude", coordsToReturn.longitude)
             setResult(RESULT_OK, intent)
@@ -91,7 +110,6 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(map.id)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -118,28 +136,33 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
         val task = fusedClient.lastLocation
 
         task.addOnSuccessListener { location: Location ->
-            currentLocation = location
-            val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this@SelectLocation)
+            coordsToReturn = LatLng(location.latitude, location.longitude)
+            locationName = "Your Current Location"
+            initialiseMap()
         }
+    }
+
+    private fun initialiseMap()
+    {
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(p0: GoogleMap) {
         gMap = p0
-
-        val currentCoordinates = LatLng(currentLocation.latitude, currentLocation.longitude)
-        placeMarker(currentCoordinates, "Your Current Location")
+        placeMarker(coordsToReturn, locationName)
 
         gMap.setOnMapClickListener { point : LatLng ->
-            val locationName = geoCoder.getFromLocation(point.latitude, point.longitude, 1) as List<Address>
+            val location = geoCoder.getFromLocation(point.latitude, point.longitude, 1) as List<Address>
             if(locationName.isEmpty())
             {
                 placeMarker(point, "Selected Location")
+                locationName = "Selected Location"
             }
             else
             {
-                val addressName = getLocationLabel(locationName[0])
-
+                val addressName = getLocationLabel(location[0])
+                locationName = addressName
                 placeMarker(point, addressName)
             }
 

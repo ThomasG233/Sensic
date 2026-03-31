@@ -36,25 +36,6 @@ object ContextsHandler {
             else -> null
         } as T
     }
-
-    /**
-     * Returns the time context object.
-     * @return time context.
-     */
-    fun getTimeContext() : TimeContext
-    {
-        return time
-    }
-
-    /**
-     * Returns the location context object.
-     * @return location context.
-     */
-    fun getLocationContext() : LocationContext
-    {
-        return location
-    }
-
     /**
      * Set the preference list
      * @param contextName:
@@ -108,7 +89,7 @@ object ContextsHandler {
 
 
         time = loadFromFile("Time", "Time", currentContext)
-        location = loadFromFile("Location", "Time", currentContext)
+        location = loadFromFile("Location", "Location", currentContext)
     }
 
     /**

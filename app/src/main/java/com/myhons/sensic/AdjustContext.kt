@@ -1,6 +1,7 @@
 package com.myhons.sensic
 
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -35,14 +36,16 @@ class AdjustContext : AppCompatActivity() {
 
     private var genresSelected = 0
     private var preferencesEnabled = true
-    var coordinates = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+
+    private var locationCoordinates = Coordinates(0.0, 0.0)
+    var coordsFromMap = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == RESULT_OK)
         {
             val returnData = result.data as Intent
             val latitude = returnData.getDoubleExtra("latitude", 0.0)
             val longitude = returnData.getDoubleExtra("longitude", 0.0)
-            val coordinates = arrayOf(latitude, longitude)
-            Log.d("LOCATION", "Returned Coordinates: ${coordinates[0]}, ${coordinates[1]}")
+            locationCoordinates = Coordinates(latitude, longitude)
+            Log.d("LOCATION", "Returned Coordinates: $latitude, $longitude")
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,20 +70,18 @@ class AdjustContext : AppCompatActivity() {
         timePickerStart.setIs24HourView(true)
         timePickerEnd.setIs24HourView(true)
 
-        btnGetLocation.setOnClickListener {
-            val intent = Intent(this, SelectLocation::class.java)
-            coordinates.launch(intent)
-        }
+
             tvTitle.text = name
             when (type) {
-                "Weather" -> tvDescriptor.text =
-                    "What genres do you want to play when it's ${name.toString().lowercase()}?"
+                "Weather" -> {
+                    tvDescriptor.text = "What genres do you want to play when it's ${name.lowercase()}?"
+                }
                 "Time" -> {
                     tvDescriptor.text = "What genres do you want to be playing?"
                     viewTime.isVisible = true
 
-                    val startTime = ContextsHandler.getTimeContext().getStartTime()
-                    val endTime = ContextsHandler.getTimeContext().getEndTime()
+                    val startTime = ContextsHandler.getContext<TimeContext>(name, type).getStartTime()
+                    val endTime = ContextsHandler.getContext<TimeContext>(name, type).getEndTime()
 
                     timePickerStart.hour = startTime.getHour()
                     timePickerStart.minute = startTime.getMinute()
@@ -90,9 +91,9 @@ class AdjustContext : AppCompatActivity() {
 
                     btnConfirm.setOnClickListener {
                         if (checkTimeValidity()) {
-                            ContextsHandler.getTimeContext().setStartTime(timePickerStart.hour, timePickerStart.minute)
-                            ContextsHandler.getTimeContext().setEndTime(timePickerEnd.hour, timePickerEnd.minute)
-                            saveUserPreferences("Time", "Time")
+                            ContextsHandler.getContext<TimeContext>(name, type).setStartTime(timePickerStart.hour, timePickerStart.minute)
+                            ContextsHandler.getContext<TimeContext>(name, type).setEndTime(timePickerEnd.hour, timePickerEnd.minute)
+                            saveUserPreferences<TimeContext>("Time", "Time")
                             finish()
                         }
                     }
@@ -101,12 +102,22 @@ class AdjustContext : AppCompatActivity() {
                 "Location" -> {
                     tvDescriptor.text = "What should be playing when you're at this location?"
                     btnGetLocation.isVisible = true
+                    locationCoordinates = ContextsHandler.getContext<LocationContext>(name, type).getCoordinates()
+                    btnGetLocation.setOnClickListener {
+                        val intent = Intent(this, SelectLocation::class.java)
+                        coordsFromMap.launch(intent)
+                    }
+                    btnConfirm.setOnClickListener {
+                        ContextsHandler.getContext<LocationContext>(name, type).setCoordinates(locationCoordinates)
+                        saveUserPreferences<LocationContext>(name, type)
+                        finish()
+                    }
                 }
 
                 else -> {
-                    tvDescriptor.text = "What genres do you want to play when you're ${name.toString().lowercase()}?"
+                    tvDescriptor.text = "What genres do you want to play when you're ${name.lowercase()}?"
                     btnConfirm.setOnClickListener {
-                        saveUserPreferences(name as String, type as String)
+                        saveUserPreferences<MusicContext>(name, type)
                         finish()
                     }
                 }
@@ -134,7 +145,7 @@ class AdjustContext : AppCompatActivity() {
                 finish()
             }
 
-            loadUserPreferences(name as String, type as String)
+            loadUserPreferences(name, type)
 
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -155,7 +166,7 @@ class AdjustContext : AppCompatActivity() {
             return false
         }
     }
-    private fun saveUserPreferences(name : String, type : String) : Boolean
+    private fun <T> saveUserPreferences(name : String, type : String) : Boolean
     {
         val userPreferences = mutableMapOf<String, Boolean>()
         for(checkbox in genres.children)
@@ -164,18 +175,7 @@ class AdjustContext : AppCompatActivity() {
             userPreferences[genre.text as String] = genre.isChecked
         }
         ContextsHandler.setContextPreferences(name, type, userPreferences)
-        return if(type != "Location" && type != "Time")
-        {
-            ContextsHandler.saveToFile(name, ContextsHandler.getContext<MusicContext>(name, type), applicationContext)
-        }
-        else if(type == "Time")
-        {
-            ContextsHandler.saveToFile(name, ContextsHandler.getContext<TimeContext>(name, type), applicationContext)
-        }
-        else
-        {
-            ContextsHandler.saveToFile(name, ContextsHandler.getContext<LocationContext>(name, type), applicationContext)
-        }
+        return ContextsHandler.saveToFile<T>(name, ContextsHandler.getContext(name, type), applicationContext)
     }
 
     private fun loadUserPreferences(name : String, type : String)
