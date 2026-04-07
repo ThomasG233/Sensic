@@ -96,7 +96,6 @@ object ContextsHandler {
             "Location" -> location.setPreferenceList(newPreferences)
         }
     }
-
     fun resetAllToDefault(applicationContext : Context)
     {
         for(mood in moodTypes)

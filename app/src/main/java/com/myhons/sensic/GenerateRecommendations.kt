@@ -1,15 +1,13 @@
 package com.myhons.sensic
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -29,24 +27,17 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.internal.concurrent.Task
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import java.security.MessageDigest
 import java.util.Calendar
 import java.util.LinkedList
-import java.util.Queue
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.forEach
@@ -125,26 +116,42 @@ class GenerateRecommendations : AppCompatActivity() {
                     inLocation = checkLocationRange(savedCoordinates)
                     checkWeatherInLocation()
                 }
-
-                catch (e: Exception) {
+                catch (e: Exception)
+                {
                     Log.e("Error", "$e")
                 }
             }
-            getTopGenres()
-            try {
-                searchSpotifyForSeeds()
-                getRecommendations()
-            }
-            catch(e: Exception)
+            val topGenres = getTopGenres()
+
+            if(topGenres.isNotEmpty())
             {
-                Log.e("Error", "$e")
+
+                try
+                {
+                    var seeds = ""
+                    topGenres.forEach { genre ->
+                        seeds += searchSpotifyForSeed(genre) + ","
+                    }
+                    seeds = seeds.dropLast(1)
+
+                    getRecommendations(seeds)
+                }
+                catch(e: Exception)
+                {
+                    Log.e("Error", "$e")
+                    finish()
+                }
+                finally
+                {
+
+                }
             }
-            finally {
+            else
+            {
+                Looper.prepare()
+                Toast.makeText(applicationContext, "No genres selected for your current context.", Toast.LENGTH_LONG).show()
                 finish()
             }
-
-
-
         }
 
 
@@ -219,7 +226,7 @@ class GenerateRecommendations : AppCompatActivity() {
         }
     }
 
-    private fun getTopGenres()
+    private fun getTopGenres() : LinkedList<String>
     {
         val genreWeights = mutableMapOf<String, Int>()
         val genreList = ContextsHandler.getGenres()
@@ -249,9 +256,18 @@ class GenerateRecommendations : AppCompatActivity() {
             addWeightsToOptions(weatherPreferences, genreWeights)
         }
 
-        genreWeights.forEach { (genre, weight) ->
-            Log.d(genre, "$weight")
+        val preferredGenres = LinkedList<String>()
+        var genresAdded = 0
+        val orderedMap = genreWeights.toSortedMap()
+        orderedMap.forEach{ (genre, weight) ->
+            if(weight != 0 && genresAdded != 5)
+            {
+                preferredGenres.add(genre)
+                genresAdded++
+            }
+            Log.e("Genre", "$genre: $weight")
         }
+        return preferredGenres
     }
 
     private fun addWeightsToOptions(preferences : Map<String, Boolean>, genres : MutableMap<String, Int>)
@@ -259,7 +275,11 @@ class GenerateRecommendations : AppCompatActivity() {
         preferences.forEach { (genreName, selected) ->
             if(selected)
             {
-                var newWeight = genres[genreName] as Int
+                var newWeight = 0
+                if(genres[genreName] != null)
+                {
+                    newWeight = genres[genreName] as Int
+                }
                 newWeight += 10
                 genres[genreName] = newWeight
             }
@@ -295,9 +315,10 @@ class GenerateRecommendations : AppCompatActivity() {
     }
 
     // Use Spotify's Search endpoint, then feed into ReccoBeats instead. https://developer.spotify.com/documentation/web-api/reference/search
-    private fun getRecommendations()
+    private fun getRecommendations(seedsForContext : String)
     {
-        val url = URL("https://api.reccobeats.com/v1/track/recommendation?size=5&seeds=5rfT032kGmLvbxZzfHlu5D")
+        val url = URL("https://api.reccobeats.com/v1/track/recommendation?size=20&seeds=$seedsForContext")
+        Log.d("URL", "$url")
         val requestProperties = mapOf("Content-type" to "application/json")
         val returnedJson = makeGetRequest(url, requestProperties)
         Log.d("Recommendations", "$returnedJson")
@@ -367,12 +388,12 @@ class GenerateRecommendations : AppCompatActivity() {
         postRequest.disconnect()
     }
 
-    private fun searchSpotifyForSeeds()
+    private fun searchSpotifyForSeed(genre : String) : String
     {
         val sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
         var authToken = sharedPreferences.getString("accessToken", "")
 
-        val url = URL("https://api.spotify.com/v1/search?q=genretype=track")
+        val url = URL("https://api.spotify.com/v1/search?q=genre:$genre&type=track")
         val requestProperties = mutableMapOf("Content-Type" to "application/json",
             "Authorization" to "Bearer $authToken")
 
@@ -392,37 +413,37 @@ class GenerateRecommendations : AppCompatActivity() {
                     authToken = sharedPreferences.getString("accessToken", "")
                     requestProperties["Authorization"] = "Bearer $authToken"
                     returnedJson = makeGetRequest(url, requestProperties)
+                    if(returnedJson.get("error") != null)
+                    {
+                        return ""
+                    }
                 }
             }
         }
-
-        Log.e("Finished", "$returnedJson")
+        val returnedSongs = returnedJson.getAsJsonObject("tracks").getAsJsonArray("items")
+        val seed = (returnedSongs[0] as JsonObject).get("id").asString
+        return seed
     }
 
-    suspend fun getCurrentLocation() : Boolean = suspendCancellableCoroutine { continuation ->
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                101
-            )
-        }
-        val task = fusedClient.lastLocation
+    suspend fun getCurrentLocation() : Boolean = suspendCancellableCoroutine { coroutine ->
 
-        task.addOnSuccessListener { location: Location ->
-            currentCoordinates = LatLng(location.latitude, location.longitude)
-            continuation.resume(true)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            val task = fusedClient.lastLocation
+            task.addOnSuccessListener { location: Location ->
+                currentCoordinates = LatLng(location.latitude, location.longitude)
+                coroutine.resume(true)
+            }
+            task.addOnFailureListener {
+                coroutine.resume(false)
+            }
+
         }
-        task.addOnFailureListener {
-            continuation.resume(false)
+        else
+        {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101)
+            coroutine.resume(false)
         }
     }
 
