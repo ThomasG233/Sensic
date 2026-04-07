@@ -33,31 +33,13 @@ class MoodSelect : AppCompatActivity() {
         btnEnergised = findViewById(R.id.btnEnergised)
         btnExhausted = findViewById(R.id.btnExhausted)
 
-        btnHappy.setOnClickListener {
-            loadMainScreen()
+        val btnArray = arrayOf(btnHappy, btnSad, btnAnxious, btnAngry, btnEnergised, btnExhausted)
+        for(btn in btnArray)
+        {
+            btn.setOnClickListener {
+                loadMainScreen(btn.text.toString())
+            }
         }
-
-        btnSad.setOnClickListener {
-            loadMainScreen()
-        }
-
-        btnAnxious.setOnClickListener {
-            loadMainScreen()
-        }
-
-        btnAngry.setOnClickListener {
-            loadMainScreen()
-        }
-
-        btnEnergised.setOnClickListener {
-            loadMainScreen()
-        }
-
-        btnExhausted.setOnClickListener {
-            loadMainScreen()
-        }
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -66,9 +48,9 @@ class MoodSelect : AppCompatActivity() {
         }
     }
 
-    private fun loadMainScreen() {
+    private fun loadMainScreen(mood : String) {
         // Set all contexts before using the app.
-        ContextsHandler.initialiseContexts(applicationContext)
+        ContextsHandler.initialiseContexts(applicationContext, mood)
         val intent = Intent(this, MainScreen::class.java)
         startActivity(intent)
         finish()
@@ -76,7 +58,7 @@ class MoodSelect : AppCompatActivity() {
 
     private fun loadTheme()
     {
-        sharedPreferences = getSharedPreferences("darkTheme", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
         if(sharedPreferences.getBoolean("darkTheme", false))
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

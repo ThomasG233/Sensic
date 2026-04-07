@@ -28,4 +28,5 @@
         <item>Rock</item>
         <item>Sleep</item>
     </string-array>
+    <string name="title_activity_get_recommendations">GetRecommendations</string>
 </resources>

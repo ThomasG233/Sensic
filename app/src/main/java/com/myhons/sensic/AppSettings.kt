@@ -2,8 +2,10 @@ package com.myhons.sensic
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Switch
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,7 @@ import androidx.core.content.edit
 class AppSettings : AppCompatActivity() {
 
     private lateinit var btnBack : ImageButton
+    private lateinit var btnResetContexts : Button
     private lateinit var switchTheme : Switch
     private val backPressed = object : OnBackPressedCallback(false)
     {
@@ -31,11 +34,12 @@ class AppSettings : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
 
-        sharedPreferences = getSharedPreferences("darkTheme", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
         onBackPressedDispatcher.addCallback(this, backPressed)
         backPressed.isEnabled = true
 
         btnBack = findViewById(R.id.btnBack)
+        btnResetContexts = findViewById(R.id.btnResetContexts)
         switchTheme = findViewById(R.id.switchTheme)
 
         if(sharedPreferences.getBoolean("darkTheme", false))
@@ -43,7 +47,12 @@ class AppSettings : AppCompatActivity() {
             switchTheme.isChecked = true
         }
         btnBack.setOnClickListener {
-            saveSettings()
+            finish()
+        }
+
+        btnResetContexts.setOnClickListener {
+            ContextsHandler.resetAllToDefault(applicationContext)
+            Toast.makeText(applicationContext, "All contexts reset to default!", Toast.LENGTH_SHORT).show()
         }
         switchTheme.setOnCheckedChangeListener { button, bool ->
             if(button.isChecked)
@@ -54,6 +63,7 @@ class AppSettings : AppCompatActivity() {
             {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+            saveSettings()
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -71,6 +81,5 @@ class AppSettings : AppCompatActivity() {
                 putBoolean("darkTheme", switchTheme.isChecked)
             }
         }
-        finish()
     }
 }

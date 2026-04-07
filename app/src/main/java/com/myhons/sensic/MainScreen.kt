@@ -26,7 +26,7 @@ class MainScreen : AppCompatActivity() {
         btnSettings = findViewById(R.id.btnSettings)
         btnContexts = findViewById(R.id.btnContexts)
         btnStart.setOnClickListener {
-            val intent = Intent(this, MusicPlayer::class.java)
+            val intent = Intent(this, GenerateRecommendations::class.java)
             startActivity(intent)
         }
         btnAuth.setOnClickListener {

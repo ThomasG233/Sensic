@@ -1,8 +1,6 @@
 package com.myhons.sensic
 import android.content.Context
-import android.location.Location
 import android.util.Log
-import com.google.android.gms.maps.model.LatLng
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
@@ -15,9 +13,35 @@ object ContextsHandler {
     private lateinit var moods : MutableMap<String, MusicContext>
     private lateinit var weather : MutableMap<String, MusicContext>
     private lateinit var movement : MutableMap<String, MusicContext>
-    // Location and Time are children of MusicContext, with additional information included.
+    // Location and Time are children of MusicContext.
     private lateinit var location : LocationContext
     private lateinit var time : TimeContext
+    // Represents the current state of certain contexts.
+    private lateinit var currentActivity : String
+    private lateinit var currentMood : String
+
+    private val moodTypes = arrayOf("Happy", "Sad", "Anxious", "Angry", "Energetic", "Exhausted")
+    private val weatherTypes = arrayOf("Sunny", "Raining", "Snowing")
+    private val movementTypes = arrayOf("Walking", "On the Road")
+    private val genres = arrayOf("Chill", "Classical", "EDM", "Folk", "K-Pop", "Lo-Fi", "Metal", "Pop", "Rock", "Sleep")
+
+    fun getMoodTypes() : Array<String>
+    {
+        return moodTypes
+    }
+
+    fun getWeatherTypes() : Array<String>
+    {
+        return weatherTypes
+    }
+    fun getMovementTypes() : Array<String>
+    {
+        return movementTypes
+    }
+    fun getGenres() : Array<String>
+    {
+        return genres
+    }
 
     /**
      * Returns a saved context from the handler.
@@ -36,6 +60,26 @@ object ContextsHandler {
             else -> null
         } as T
     }
+
+    fun setCurrentActivity(activity : String)
+    {
+        currentActivity = activity
+    }
+
+    fun getCurrentActivity() : String
+    {
+        return currentActivity
+    }
+
+    fun getMood() : String
+    {
+        return currentMood
+    }
+    fun setMood(mood : String)
+    {
+        currentMood = mood
+    }
+
     /**
      * Set the preference list
      * @param contextName:
@@ -51,6 +95,29 @@ object ContextsHandler {
             "Time" -> time.setPreferenceList(newPreferences)
             "Location" -> location.setPreferenceList(newPreferences)
         }
+    }
+
+    fun resetAllToDefault(applicationContext : Context)
+    {
+        for(mood in moodTypes)
+        {
+            moods[mood] = loadDefaultPreferences(mood, "Mood")
+            saveToFile(mood, moods[mood], applicationContext)
+        }
+        for(climate in weatherTypes)
+        {
+            weather[climate] = loadDefaultPreferences(climate, "Weather")
+            saveToFile(climate, weather[climate], applicationContext)
+        }
+        for(motion in movementTypes)
+        {
+            movement[motion] = loadDefaultPreferences(motion, "Movement")
+            saveToFile(motion, movement[motion], applicationContext)
+        }
+        time = loadDefaultPreferences("Time", "Time")
+        saveToFile("Time", time, applicationContext)
+        location = loadDefaultPreferences("Location", "Location")
+        saveToFile("Location", location, applicationContext)
     }
 
     /**
@@ -73,11 +140,13 @@ object ContextsHandler {
      * Initialise all contexts at app startup.
      * @param currentContext: the application context. Required in order to save and load preferences into the app.
      */
-    fun initialiseContexts(currentContext : Context)
+    fun initialiseContexts(currentContext: Context, mood: String)
     {
         moods = mutableMapOf()
         weather = mutableMapOf()
         movement = mutableMapOf()
+        currentActivity = ""
+        currentMood = mood
 
         val moodTypes = arrayOf("Happy", "Sad", "Anxious", "Angry", "Energetic", "Exhausted")
         val weatherTypes = arrayOf("Sunny", "Raining", "Snowing")
@@ -113,10 +182,31 @@ object ContextsHandler {
         }
         catch(e : Exception)
         {
-            Log.d("Object Writing Error", "$e")
+            Log.e("Object Writing Error", "$e")
             return false
         }
         return true
+    }
+
+    fun <T> loadDefaultPreferences(contextName : String, contextType: String) : T
+    {
+        val preferenceDefault = mutableMapOf<String, Boolean>()
+        for(genre in genres)
+        {
+            preferenceDefault[genre] = false
+        }
+        if(contextType != "Time" && contextType != "Location")
+        {
+            return MusicContext(contextName, preferenceDefault) as T
+        }
+        else if(contextType == "Location")
+        {
+            return LocationContext(contextName, preferenceDefault, Coordinates(0.0, 0.0)) as T
+        }
+        else
+        {
+            return TimeContext(contextName, preferenceDefault, Time(12, 0), Time(13, 0)) as T
+        }
     }
 
 
@@ -140,26 +230,13 @@ object ContextsHandler {
         {
             Log.e("Error", "$e caused by $contextName")
         }
-        val genres = arrayOf("Chill", "Classical", "EDM", "Folk", "K-Pop", "Lo-Fi", "Metal", "Pop", "Rock", "Sleep")
+
         val preferenceDefault = mutableMapOf<String, Boolean>()
         for(genre in genres)
         {
             preferenceDefault[genre] = false
         }
-        val musicContext : MusicContext
-        if(contextType != "Location" && contextType != "Time")
-        {
-            musicContext = MusicContext(contextName, preferenceDefault)
-        }
-        else if(contextType == "Time")
-        {
-            musicContext = TimeContext(contextName, preferenceDefault, Time(12, 0), Time(13, 0))
-        }
-        else
-        {
-            musicContext = LocationContext(contextName, preferenceDefault, Coordinates(0.0,0.0))
-        }
-
+        val musicContext = loadDefaultPreferences<T>(contextName, contextType)
         if(!saveToFile(contextName, musicContext, applicationContext))
         {
             Log.e("Error", "Could not successfully load or save preferences. Using default empty preference list for context $contextName")

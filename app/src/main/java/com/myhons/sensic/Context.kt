@@ -3,7 +3,10 @@ package com.myhons.sensic
 import java.io.Serializable
 
 // For the Preference List to be saved successfully, it must be serializable, but with Java.
-open class MusicContext(private var name: String, private var preferenceList : Map<String, Boolean>) : Serializable
+open class MusicContext(
+    private var name: String,
+    private var preferenceList : Map<String, Boolean>
+) : Serializable
 {
     fun getName() : String
     {
@@ -88,6 +91,13 @@ class Time(private var hour : Int, private var minute : Int) : Serializable
     fun getMinute() : Int
     {
         return minute
+    }
+
+    // Uses seconds to determine whether the current time is in range.
+    fun getInSeconds() : Int
+    {
+        val timeInSeconds = (hour * 3600) + (minute * 60)
+        return timeInSeconds
     }
 }
 

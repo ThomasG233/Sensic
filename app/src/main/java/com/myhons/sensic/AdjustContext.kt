@@ -17,12 +17,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import com.google.android.gms.location.ActivityTransition
 
 /**
  * Activity called when the user wishes to edit the preference list for a context.
  */
 class AdjustContext : AppCompatActivity() {
 
+
+
+    val transitions = mutableListOf<ActivityTransition>()
     private lateinit var btnConfirm : Button
     private lateinit var btnGetLocation : Button
     private lateinit var btnBack : ImageButton
@@ -71,10 +75,15 @@ class AdjustContext : AppCompatActivity() {
         timePickerEnd.setIs24HourView(true)
 
 
+
             tvTitle.text = name
             when (type) {
                 "Weather" -> {
                     tvDescriptor.text = "What genres do you want to play when it's ${name.lowercase()}?"
+                    btnConfirm.setOnClickListener {
+                        saveUserPreferences<MusicContext>(name, type)
+                        finish()
+                    }
                 }
                 "Time" -> {
                     tvDescriptor.text = "What genres do you want to be playing?"

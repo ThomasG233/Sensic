@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets
 
 private lateinit var sharedPreferences : SharedPreferences
 private lateinit var accessToken : String
+private lateinit var refreshToken : String
 
 /**
  * Checks to see if the callback URI is called by Spotify.
@@ -27,7 +29,7 @@ class Authentication : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = getSharedPreferences("accessExpiry", 0)
+        sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
 
         val returnData = intent.data
         var obtainingToken = false
@@ -36,19 +38,17 @@ class Authentication : AppCompatActivity() {
         var toastMessage = "We could not authenticate your account with Spotify. Please try again later."
         // If the callback address has been used.
         if (returnData != null) {
-            Log.d("AUTH", "$returnData")
             val errorCode = returnData.getQueryParameter("error")
-
             if (errorCode == null) {
-                // AUTHENTICATION CODE!!!
                 val authCode = returnData.getQueryParameter("code")
                 obtainingToken = true
-                tokenCoroutine = CoroutineScope(Dispatchers.IO).launch {
+                tokenCoroutine = lifecycleScope.launch(Dispatchers.IO) {
                     try
                     {
                         getAccessToken(authCode.toString())
                         sharedPreferences.edit {
                             putString("accessToken", accessToken)
+                            putString("refreshToken", refreshToken)
                         }
                         toastMessage = "Account successfully authenticated!"
                     }
@@ -117,8 +117,8 @@ class Authentication : AppCompatActivity() {
         val response = stream.bufferedReader().use { it.readText() }
         // Collect the access token from the response JSON.
         val jsonObject = gson.fromJson(response, JsonObject::class.java)
-        accessToken = jsonObject.get("access_token").toString()
-        Log.e("Spotify", accessToken)
+        accessToken = jsonObject.get("access_token").asString
+        refreshToken = jsonObject.get("refresh_token").asString
         // Close the connection after use.
         postRequest.disconnect()
     }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,9 +13,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Sensic">
+        android:theme="@style/Theme.Sensic" >
         <activity
-            android:name=".ContextHandler"
+            android:name=".GenerateRecommendations"
             android:exported="false" />
         <activity
             android:name=".SelectLocation"
@@ -25,7 +25,7 @@
             android:exported="false" />
         <activity
             android:name=".Authentication"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -48,7 +48,7 @@
             android:exported="false" />
         <activity
             android:name=".MusicPlayer"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -62,17 +62,21 @@
         </activity>
         <activity
             android:name=".MoodSelect"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".ActivityCallback"
+            android:exported="false" >
+        </receiver>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCE14vt0_b7iAa3lQXi_5IBYuy9yJq67_c"></meta-data>
+            android:value="AIzaSyCE14vt0_b7iAa3lQXi_5IBYuy9yJq67_c" />
     </application>
 
 </manifest>
