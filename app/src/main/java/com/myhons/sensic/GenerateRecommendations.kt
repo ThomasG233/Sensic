@@ -7,17 +7,22 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
+import android.widget.Button
+import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
@@ -27,11 +32,15 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import okhttp3.internal.concurrent.Task
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -49,13 +58,20 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-class GenerateRecommendations : AppCompatActivity() {
+class GenerateRecommendations : AppCompatActivity(){
 
     private var currentCoordinates = LatLng(0.0, 0.0)
     private var weather = ""
     private lateinit var fusedClient : FusedLocationProviderClient
     private var inTimeRange = false
     private var inLocation = false
+    private var currentContexts = ""
+    private var currentActivity = ""
+    private lateinit var tvGenerating : TextView
+    private lateinit var listRecommendations: ListView
+    private lateinit var clRecommendations : ConstraintLayout
+    private lateinit var tvCurrentContexts : TextView
+    private lateinit var btnCreatePlaylists : Button
 
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -65,30 +81,12 @@ class GenerateRecommendations : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_generate_recommendations)
 
+        tvGenerating = findViewById(R.id.tvGenerating)
+        tvCurrentContexts = findViewById(R.id.tvCurrentContexts)
+        clRecommendations = findViewById(R.id.clRecommendations)
+        listRecommendations = findViewById(R.id.listRecommendations)
+        btnCreatePlaylists = findViewById(R.id.btnCreatePlaylist)
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
-
-
-        val movement = mutableListOf<ActivityTransition>()
-
-        movement += ActivityTransition.Builder()
-            .setActivityType(DetectedActivity.IN_VEHICLE)
-            .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
-            .build()
-
-        movement += ActivityTransition.Builder()
-            .setActivityType(DetectedActivity.IN_VEHICLE)
-            .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
-            .build()
-
-        movement += ActivityTransition.Builder()
-            .setActivityType(DetectedActivity.WALKING)
-            .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
-            .build()
-
-        movement += ActivityTransition.Builder()
-            .setActivityType(DetectedActivity.WALKING)
-            .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
-            .build()
 
         val calendar = Calendar.getInstance()
         val currentTime = Time(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
@@ -101,9 +99,6 @@ class GenerateRecommendations : AppCompatActivity() {
         // Get current mood. XX
         Log.e("Mood", ContextsHandler.getMood())
 
-        // Gets current coordinates. XX
-        // Gets current weather conditions. XX
-        // Gets current time. XX
         // Get current movement ???
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -125,35 +120,81 @@ class GenerateRecommendations : AppCompatActivity() {
 
             if(topGenres.isNotEmpty())
             {
-
-                try
-                {
+                try {
                     var seeds = ""
                     topGenres.forEach { genre ->
-                        seeds += searchSpotifyForSeed(genre) + ","
+                        val seedToAdd = searchSpotifyForSeed(genre)
+                        if (seedToAdd == "400") {
+                            withContext(Dispatchers.Main)
+                            {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "You must authenticate with Spotify before you can generate a playlist.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                finish()
+                            }
+                        } else if (seedToAdd != "") {
+                            seeds += "$seedToAdd,"
+                        }
                     }
                     seeds = seeds.dropLast(1)
+                    val recommendations = getRecommendations(seeds)
+                    withContext(Dispatchers.Main)
+                    {
+                        if(recommendations.isEmpty())
+                        {
+                            Toast.makeText(applicationContext, "Could not find suitable songs. Please add more genres to your contexts.", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        else
+                        {
+                            tvGenerating.isGone = true
+                            clRecommendations.isVisible = true
+                            tvCurrentContexts.text = currentContexts
+                            val recommendationAdapter = SongListAdapter(
+                                applicationContext,
+                                android.R.layout.simple_list_item_2,
+                                recommendations
+                            )
+                            listRecommendations.adapter = recommendationAdapter
+                            btnCreatePlaylists.setOnClickListener {
+                                lifecycleScope.launch(Dispatchers.IO)
+                                {
+                                    var playlistID = createPlaylistOnSpotify()
+                                    if(playlistID != "")
+                                    {
+                                        if(fillPlaylistOnSpotify(playlistID, recommendations))
+                                        {
+                                            Log.d("Spotify", "Check Spotify.")
+                                        }
+                                        else
+                                        {
+                                            Log.e("Spotify", "No.")
+                                        }
+                                    }
+                                }
 
-                    getRecommendations(seeds)
+                            }
+                        }
+
+                    }
                 }
                 catch(e: Exception)
                 {
                     Log.e("Error", "$e")
                     finish()
                 }
-                finally
-                {
-
-                }
             }
             else
             {
-                Looper.prepare()
-                Toast.makeText(applicationContext, "No genres selected for your current context.", Toast.LENGTH_LONG).show()
-                finish()
+                withContext(Dispatchers.Main)
+                {
+                    Toast.makeText(applicationContext, "No genres selected for your current context.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
         }
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -176,28 +217,6 @@ class GenerateRecommendations : AppCompatActivity() {
         return currentSecond in startSecond..endSecond
     }
 
-    // https://developer.android.com/develop/sensors-and-location/location/transitions#kotlin
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun getCurrentActivity(transitions : MutableList<ActivityTransition>)
-    {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-                101
-            )
-        }
-
-        val broadcastIntent = PendingIntent.getActivity(applicationContext, 0, Intent(this, ActivityCallback::class.java), PendingIntent.FLAG_IMMUTABLE)
-        val request = ActivityTransitionRequest(transitions)
-        val task = ActivityRecognition.getClient(this).requestActivityTransitionUpdates(request, broadcastIntent)
-        task.addOnSuccessListener {
-            Log.d("ActivityCollection", ContextsHandler.getCurrentActivity())
-        }
-        task.addOnFailureListener { e: Exception ->
-            Log.e("ActivityCollection", "${e.message}")
-        }
-    }
 
     // Haversine Formula https://www.movable-type.co.uk/scripts/latlong.html
     private fun checkLocationRange(savedCoordinates : Coordinates) : Boolean
@@ -219,7 +238,7 @@ class GenerateRecommendations : AppCompatActivity() {
 
         val d = earthRadius * c
 
-        return if(d <= 100) {
+        return if(d <= 50) {
             true
         } else {
             false
@@ -236,25 +255,43 @@ class GenerateRecommendations : AppCompatActivity() {
             genreWeights[genreName] = 0
         }
 
-        val moodContext = ContextsHandler.getContext<MusicContext>("Happy", "Mood").getPreferenceList()
-        addWeightsToOptions(moodContext, genreWeights)
+        val mood = ContextsHandler.getMood()
+        Log.e("Mood", mood)
 
+        val moodContext = ContextsHandler.getContext<MusicContext>(mood, "Mood").getPreferenceList()
+        currentContexts = "Feeling $mood, "
+        addWeightsToOptions(moodContext, genreWeights)
+        currentActivity = ContextsHandler.getCurrentActivity()
+        if(currentActivity != "")
+        {
+            val activityPreferences = ContextsHandler.getContext<MusicContext>(currentActivity, "Movement").getPreferenceList()
+            addWeightsToOptions(activityPreferences, genreWeights)
+            currentContexts += "whilst ${currentActivity.lowercase()}, "
+        }
         if(inTimeRange)
         {
-            val timePreferences = ContextsHandler.getContext<TimeContext>("Time", "Time").getPreferenceList()
+            val timeContext = ContextsHandler.getContext<TimeContext>("Time", "Time")
+            val timePreferences = timeContext.getPreferenceList()
             addWeightsToOptions(timePreferences, genreWeights)
-
+            currentContexts += "between ${timeContext.getStartText()} & ${timeContext.getEndText()}, "
         }
         if(inLocation)
         {
-            val locationPreferences = ContextsHandler.getContext<LocationContext>("Location", "Location").getPreferenceList()
+            val locationContext = ContextsHandler.getContext<LocationContext>("Location", "Location")
+            val locationPreferences = locationContext.getPreferenceList()
+            val locationName = locationContext.getName()
             addWeightsToOptions(locationPreferences, genreWeights)
+            currentContexts += "at $locationName, "
         }
         if(weather != "")
         {
             val weatherPreferences = ContextsHandler.getContext<MusicContext>(weather, "Weather").getPreferenceList()
             addWeightsToOptions(weatherPreferences, genreWeights)
+            currentContexts += "currently $weather, "
         }
+
+        currentContexts = currentContexts.substringBeforeLast(", ") + "."
+
 
         val preferredGenres = LinkedList<String>()
         var genresAdded = 0
@@ -315,31 +352,146 @@ class GenerateRecommendations : AppCompatActivity() {
     }
 
     // Use Spotify's Search endpoint, then feed into ReccoBeats instead. https://developer.spotify.com/documentation/web-api/reference/search
-    private fun getRecommendations(seedsForContext : String)
+    private fun getRecommendations(seedsForContext : String) : ArrayList<Song>
     {
-        val url = URL("https://api.reccobeats.com/v1/track/recommendation?size=20&seeds=$seedsForContext")
+        val url = URL("https://api.reccobeats.com/v1/track/recommendation?size=30&seeds=$seedsForContext")
         Log.d("URL", "$url")
         val requestProperties = mapOf("Content-type" to "application/json")
         val returnedJson = makeGetRequest(url, requestProperties)
         Log.d("Recommendations", "$returnedJson")
+        if(returnedJson.get("error") != null)
+        {
+            Log.e("ReccoError", "Bad Seed.")
+            return ArrayList()
+        }
         val musicList = returnedJson.getAsJsonArray("content")
         Log.d("Music List", "$musicList")
-        val musicPlaylist = LinkedList<Song>()
+        val musicPlaylist = ArrayList<Song>()
 
         for(i in 0 until musicList.size())
         {
             val song = musicList[i] as JsonObject
-            val songName = song.get("trackTitle").asString
-            val artistName = (song.getAsJsonArray("artists").get(0) as JsonObject).get("name").asString
-            val spotifyLink = song.get("href").asString
-            val spotifyID = spotifyLink.substringAfterLast("/")
-            val songToAdd = Song(songName, artistName, spotifyLink, spotifyID)
-            musicPlaylist.add(songToAdd)
+            val region = song.get("availableCountries").asString
+            if(region.contains("GB"))
+            {
+                val songName = song.get("trackTitle").asString
+                val artistName = (song.getAsJsonArray("artists").get(0) as JsonObject).get("name").asString
+                val spotifyLink = song.get("href").asString
+                val spotifyID = spotifyLink.substringAfterLast("/")
+                val songToAdd = Song(songName, artistName, spotifyLink, spotifyID)
+                musicPlaylist.add(songToAdd)
+            }
         }
         musicPlaylist.forEach { song ->
-            Log.e("Playlist", "${song.getTrackName()} by ${song.getArtistName()}, available at: ${song.getSpotifyLink()}. ID: ${song.getSpotifyID()}")
+            Log.d("Playlist", "${song.getTrackName()} by ${song.getArtistName()}, available at: ${song.getSpotifyLink()}. ID: ${song.getSpotifyID()}")
         }
+        return musicPlaylist
     }
+    private fun fillPlaylistOnSpotify(playlistID : String, songsToAdd : ArrayList<Song>) : Boolean
+    {
+        val sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
+        val accessToken = sharedPreferences.getString("accessToken", "")
+        val url = URL("https://api.spotify.com/v1/playlists/$playlistID/items")
+        val postRequest = url.openConnection() as HttpURLConnection
+        postRequest.requestMethod = "POST"
+        postRequest.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+        postRequest.setRequestProperty("Accept", "application/json")
+        postRequest.setRequestProperty("Authorization", "Bearer $accessToken")
+        postRequest.setDoOutput(true)
+        val parameters = JsonObject()
+        val songsForPlaylist = JsonArray()
+        songsToAdd.forEach{ song ->
+            songsForPlaylist.add("spotify:track:${song.getSpotifyID()}")
+        }
+        parameters.add("uris", songsForPlaylist)
+        parameters.addProperty("position", 0)
+        val parametersToUse = parameters.toString()
+        val out = parametersToUse.toByteArray(StandardCharsets.UTF_8)
+        // Sends the POST request to Spotify's API.
+        postRequest.outputStream.use { os ->
+            os.write(out)
+        }
+
+        val gson = Gson()
+        // If the request was not successful
+        val stream : InputStream
+        var errorReturned = false
+        if (postRequest.responseCode != 201)
+        {
+            stream = postRequest.errorStream
+            errorReturned = true
+        }
+        else
+        {
+            stream = postRequest.inputStream
+        }
+
+        val returnedData = stream.bufferedReader().use { it.readText() }
+        Log.e("SpotifyResponse", returnedData)
+        val jsonObject = gson.fromJson(returnedData, JsonObject::class.java)
+        if(!errorReturned)
+        {
+            postRequest.disconnect()
+            return true
+        }
+        // Close the connection.
+        postRequest.disconnect()
+        return false
+    }
+
+    private fun createPlaylistOnSpotify() : String
+    {
+        val sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
+        val accessToken = sharedPreferences.getString("accessToken", "")
+        val url = URL("https://api.spotify.com/v1/me/playlists")
+        val postRequest = url.openConnection() as HttpURLConnection
+        postRequest.requestMethod = "POST"
+        postRequest.setRequestProperty("Content-Type", "application/json")
+        postRequest.setRequestProperty("Accept", "application/json")
+        postRequest.setRequestProperty("Authorization", "Bearer $accessToken")
+        postRequest.setDoOutput(true)
+        val parameters = JsonObject()
+        parameters.addProperty("name", currentContexts)
+        parameters.addProperty("description", "Generated by Sensic.")
+        parameters.addProperty("collaborative", false)
+        parameters.addProperty("public", false)
+
+        val convertedParameters = parameters.toString()
+        Log.d("Parameters", convertedParameters)
+        val out = convertedParameters.toByteArray(StandardCharsets.UTF_8)
+        // Sends the POST request to Spotify's API.
+        postRequest.outputStream.use { os ->
+            os.write(out)
+        }
+
+        val gson = Gson()
+        // If the request was not successful
+        val stream : InputStream
+        var errorReturned = false
+        if (postRequest.responseCode != 201)
+        {
+            stream = postRequest.errorStream
+            errorReturned = true
+        }
+        else
+        {
+            stream = postRequest.inputStream
+        }
+
+        val returnedData = stream.bufferedReader().use { it.readText() }
+        Log.e("SpotifyResponse", returnedData)
+        val jsonObject = gson.fromJson(returnedData, JsonObject::class.java)
+        if(!errorReturned)
+        {
+            val playlistID = jsonObject.get("id").asString
+            postRequest.disconnect()
+            return playlistID
+        }
+        // Close the connection.
+        postRequest.disconnect()
+        return ""
+    }
+
 
     private fun refreshSpotifyToken()
     {
@@ -405,7 +557,7 @@ class GenerateRecommendations : AppCompatActivity() {
             when(responseCode)
             {
                 400 -> {
-                    finish()
+                    return "400"
                 }
                 401 -> {
                     Log.e("Spotify", "Need to reauthenticate.")
@@ -420,9 +572,25 @@ class GenerateRecommendations : AppCompatActivity() {
                 }
             }
         }
-        val returnedSongs = returnedJson.getAsJsonObject("tracks").getAsJsonArray("items")
-        val seed = (returnedSongs[0] as JsonObject).get("id").asString
-        return seed
+        lateinit var returnedSongs : JsonArray
+        try {
+            returnedSongs = returnedJson.getAsJsonObject("tracks").getAsJsonArray("items")
+            Log.e("Returned Json 2", "$returnedSongs")
+            if(returnedSongs.isEmpty)
+            {
+                Log.e("Song returned", "None")
+                return ""
+            }
+            else
+            {
+                Log.e("Song returned", (returnedSongs[0] as JsonObject).get("id").asString)
+                return (returnedSongs[0] as JsonObject).get("id").asString
+            }
+        }
+        catch (e : Exception)
+        {
+            return ""
+        }
     }
 
     suspend fun getCurrentLocation() : Boolean = suspendCancellableCoroutine { coroutine ->
@@ -430,10 +598,20 @@ class GenerateRecommendations : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
+
             val task = fusedClient.lastLocation
-            task.addOnSuccessListener { location: Location ->
-                currentCoordinates = LatLng(location.latitude, location.longitude)
-                coroutine.resume(true)
+            task.addOnSuccessListener { location: Location? ->
+                if(location != null)
+                {
+                    currentCoordinates = LatLng(location.latitude, location.longitude)
+                    coroutine.resume(true)
+                }
+                else
+                {
+                    coroutine.resume(false)
+                }
+
+
             }
             task.addOnFailureListener {
                 coroutine.resume(false)

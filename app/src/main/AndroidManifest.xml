@@ -16,15 +16,19 @@
         android:theme="@style/Theme.Sensic" >
         <activity
             android:name=".GenerateRecommendations"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".SelectLocation"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".AdjustContext"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Authentication"
+            android:screenOrientation="portrait"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -39,15 +43,19 @@
         </activity>
         <activity
             android:name=".ContextsMenu"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".AppSettings"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MainScreen"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MusicPlayer"
+            android:screenOrientation="portrait"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -62,6 +70,7 @@
         </activity>
         <activity
             android:name=".MoodSelect"
+            android:screenOrientation="portrait"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

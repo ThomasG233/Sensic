@@ -24,7 +24,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnAnxious"
         app:layout_constraintTop_toBottomOf="@+id/btnSad"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnExhausted"
@@ -40,7 +40,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnEnergised"
+        app:layout_constraintStart_toEndOf="@+id/btnEnergetic"
         app:layout_constraintTop_toBottomOf="@+id/btnAngry" />
 
     <Button
@@ -60,7 +60,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnHappy"
         app:layout_constraintTop_toTopOf="@+id/btnHappy"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/moodLabel"
@@ -91,7 +91,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/btnSad"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/moodLabel" />
 
@@ -109,19 +109,19 @@
         app:layout_constraintTop_toBottomOf="@+id/btnExhausted" />
 
     <Button
-        android:id="@+id/btnEnergised"
+        android:id="@+id/btnEnergetic"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="175dp"
         android:layout_height="150dp"
         android:backgroundTint="#8BC34A"
         android:fontFamily="sans-serif-black"
-        android:text="Energised"
+        android:text="Energetic"
         android:textAllCaps="false"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/btnExhausted"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAnxious" />
 
@@ -137,11 +137,11 @@
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btnEnergised"
+        app:layout_constraintBottom_toTopOf="@+id/btnEnergetic"
         app:layout_constraintEnd_toStartOf="@+id/btnAngry"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnHappy"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

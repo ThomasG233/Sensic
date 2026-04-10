@@ -42,13 +42,17 @@ class AdjustContext : AppCompatActivity() {
     private var preferencesEnabled = true
 
     private var locationCoordinates = Coordinates(0.0, 0.0)
+    private var locationName = "this location"
     var coordsFromMap = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == RESULT_OK)
         {
             val returnData = result.data as Intent
             val latitude = returnData.getDoubleExtra("latitude", 0.0)
             val longitude = returnData.getDoubleExtra("longitude", 0.0)
+            val locationLabel = returnData.getStringExtra("name")
             locationCoordinates = Coordinates(latitude, longitude)
+            locationName = locationLabel.toString()
+            tvDescriptor.text = "What should be playing when you're at $locationName?"
             Log.d("LOCATION", "Returned Coordinates: $latitude, $longitude")
         }
     }
@@ -109,15 +113,22 @@ class AdjustContext : AppCompatActivity() {
                 }
 
                 "Location" -> {
-                    tvDescriptor.text = "What should be playing when you're at this location?"
-                    btnGetLocation.isVisible = true
                     locationCoordinates = ContextsHandler.getContext<LocationContext>(name, type).getCoordinates()
+                    val nameToDisplay = ContextsHandler.getContext<LocationContext>("Location", "Location").getName()
+                    if(nameToDisplay != "" && nameToDisplay != "Location")
+                    {
+                        locationName = nameToDisplay
+                    }
+                    tvDescriptor.text = "What should be playing when you're at $locationName?"
+                    btnGetLocation.isVisible = true
+
                     btnGetLocation.setOnClickListener {
                         val intent = Intent(this, SelectLocation::class.java)
                         coordsFromMap.launch(intent)
                     }
                     btnConfirm.setOnClickListener {
-                        ContextsHandler.getContext<LocationContext>(name, type).setCoordinates(locationCoordinates)
+                        ContextsHandler.getContext<LocationContext>("Location", "Location").setCoordinates(locationCoordinates)
+                        ContextsHandler.getContext<LocationContext>("Location", "Location").setName(locationName)
                         saveUserPreferences<LocationContext>(name, type)
                         finish()
                     }

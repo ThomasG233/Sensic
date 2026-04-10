@@ -65,6 +65,38 @@ class TimeContext(
         return startTime
     }
 
+    fun getStartText() : String
+    {
+        val startHour = "${startTime.getHour()}"
+        val startMinute = startTime.getMinute()
+        var minAsText : String
+        if(startTime.getMinute() < 10)
+        {
+            minAsText = "0${startMinute}"
+        }
+        else
+        {
+            minAsText = "$startMinute"
+        }
+        return "$startHour:$minAsText"
+    }
+
+    fun getEndText() : String
+    {
+        val endHour = "${endTime.getHour()}"
+        val endMinute = endTime.getMinute()
+        var minAsText : String
+        if(endTime.getMinute() < 10)
+        {
+            minAsText = "0${endMinute}"
+        }
+        else
+        {
+            minAsText = "$endMinute"
+        }
+        return "$endHour:$minAsText"
+    }
+
     fun getEndTime() : Time
     {
         return endTime

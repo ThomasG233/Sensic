@@ -23,6 +23,7 @@ class AppSettings : AppCompatActivity() {
     {
         override fun handleOnBackPressed() {
             saveSettings()
+            finish()
         }
     }
     private lateinit var sharedPreferences: SharedPreferences

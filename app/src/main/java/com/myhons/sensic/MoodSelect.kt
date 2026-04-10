@@ -17,7 +17,7 @@ class MoodSelect : AppCompatActivity() {
     private lateinit var btnSad: Button
     private lateinit var btnAnxious: Button
     private lateinit var btnAngry: Button
-    private lateinit var btnEnergised: Button
+    private lateinit var btnEnergetic: Button
     private lateinit var btnExhausted: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +30,10 @@ class MoodSelect : AppCompatActivity() {
         btnSad = findViewById(R.id.btnSad)
         btnAnxious = findViewById(R.id.btnAnxious)
         btnAngry = findViewById(R.id.btnAngry)
-        btnEnergised = findViewById(R.id.btnEnergised)
+        btnEnergetic = findViewById(R.id.btnEnergetic)
         btnExhausted = findViewById(R.id.btnExhausted)
 
-        val btnArray = arrayOf(btnHappy, btnSad, btnAnxious, btnAngry, btnEnergised, btnExhausted)
+        val btnArray = arrayOf(btnHappy, btnSad, btnAnxious, btnAngry, btnEnergetic, btnExhausted)
         for(btn in btnArray)
         {
             btn.setOnClickListener {

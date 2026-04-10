@@ -1,11 +1,14 @@
 package com.myhons.sensic
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Geocoder.GeocodeListener
 import android.location.Location
+import android.location.LocationManager
+import android.location.LocationManager.GPS_PROVIDER
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -55,9 +58,20 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
         val savedCoordinates = ContextsHandler.getContext<LocationContext>("Location", "Location").getCoordinates()
         coordsToReturn = LatLng(savedCoordinates.getLatitude(), savedCoordinates.getLongitude())
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
+
+        val locationManager = applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val gpsEnabled = locationManager.isProviderEnabled(GPS_PROVIDER)
         if(coordsToReturn.latitude == 0.0 && coordsToReturn.longitude == 0.0)
         {
-            getLocation()
+            if(gpsEnabled)
+            {
+                getLocation()
+            }
+            else
+            {
+                initialiseMap()
+            }
+
         }
         else
         {
@@ -77,6 +91,21 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
             ContextsHandler.getContext<LocationContext>("Location", "Location").setCoordinates(coordsToReturn.latitude, coordsToReturn.longitude)
             intent.putExtra("latitude", coordsToReturn.latitude)
             intent.putExtra("longitude", coordsToReturn.longitude)
+            if(locationName == "Your Current Location")
+            {
+                val address = geoCoder.getFromLocation(coordsToReturn.latitude, coordsToReturn.longitude, 1) as List<Address>
+                if(address.isNotEmpty())
+                {
+                    val currentAddress = address[0]
+                    locationName = getLocationLabel(currentAddress)
+                }
+                else
+                {
+                    locationName = "this saved location"
+                }
+
+            }
+            intent.putExtra("name", locationName)
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -150,7 +179,11 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(p0: GoogleMap) {
         gMap = p0
-        placeMarker(coordsToReturn, locationName)
+        if(coordsToReturn != LatLng(0.0,0.0))
+        {
+            placeMarker(coordsToReturn, locationName)
+        }
+
 
         gMap.setOnMapClickListener { point : LatLng ->
             val location = geoCoder.getFromLocation(point.latitude, point.longitude, 1) as List<Address>
