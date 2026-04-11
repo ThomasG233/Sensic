@@ -43,6 +43,7 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var searchView : SearchView
     private var geoCoder = Geocoder(this, Locale.getDefault())
     private var coordsToReturn = LatLng(0.0,0.0)
+    private var contextToLoad = ""
     private var locationName = ""
 
 
@@ -55,7 +56,9 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
         map = findViewById(R.id.map)
         searchView = findViewById(R.id.searchView)
 
-        val savedCoordinates = ContextsHandler.getContext<LocationContext>("Location", "Location").getCoordinates()
+        contextToLoad = intent.getStringExtra("Location") as String
+
+        val savedCoordinates = ContextsHandler.getContext<LocationContext>(contextToLoad, "Location").getCoordinates()
         coordsToReturn = LatLng(savedCoordinates.getLatitude(), savedCoordinates.getLongitude())
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -88,7 +91,7 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
         }
 
         btnConfirmLocation.setOnClickListener {
-            ContextsHandler.getContext<LocationContext>("Location", "Location").setCoordinates(coordsToReturn.latitude, coordsToReturn.longitude)
+            ContextsHandler.getContext<LocationContext>(contextToLoad, "Location").setCoordinates(coordsToReturn.latitude, coordsToReturn.longitude)
             intent.putExtra("latitude", coordsToReturn.latitude)
             intent.putExtra("longitude", coordsToReturn.longitude)
             if(locationName == "Your Current Location")
@@ -122,8 +125,9 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
                     if (searchedAddress.isNotEmpty())
                     {
                         val latLng = LatLng(searchedAddress[0].latitude, searchedAddress[0].longitude)
-                        val addressName = getLocationLabel(searchedAddress[0])
-                        placeMarker(latLng, addressName)
+                        val address = searchedAddress[0]
+                        locationName = getLocationLabel(address)
+                        placeMarker(latLng, locationName)
                         return true
                     }
                     else
@@ -235,7 +239,7 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
         val markerOptions = MarkerOptions().position(location).title(name)
         markerOptions.icon(
             BitmapDescriptorFactory.defaultMarker(
-                BitmapDescriptorFactory.HUE_ORANGE
+                BitmapDescriptorFactory.HUE_BLUE
             )
         )
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 15f)

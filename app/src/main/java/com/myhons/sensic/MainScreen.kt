@@ -30,6 +30,7 @@ class MainScreen : AppCompatActivity() {
     private lateinit var btnAuth: Button
     private lateinit var btnSettings : Button
     private lateinit var btnContexts: Button
+    private lateinit var btnPlayer : Button
 
     private lateinit var activityIntent : PendingIntent
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -49,6 +50,7 @@ class MainScreen : AppCompatActivity() {
             val intent = Intent(this, GenerateRecommendations::class.java)
             startActivity(intent)
         }
+        btnPlayer = findViewById(R.id.btnPlayer)
         btnAuth.setOnClickListener {
 
             val clientID = PKCEHandler.getClientID()
@@ -62,6 +64,11 @@ class MainScreen : AppCompatActivity() {
                         "&code_challenge=$challenge" +
                         "&redirect_uri=$redirectUri").toUri())
             startActivity(authenticateIntent)
+        }
+
+        btnPlayer.setOnClickListener {
+            val intent = Intent(this, MusicPlayer::class.java)
+            startActivity(intent)
         }
         btnSettings.setOnClickListener {
             val intent = Intent(this, AppSettings::class.java)

@@ -65,7 +65,7 @@
 
                 <data
                     android:host="callback"
-                    android:scheme="com.myhons.sensic" />
+                    android:scheme="sensic" />
             </intent-filter>
         </activity>
         <activity

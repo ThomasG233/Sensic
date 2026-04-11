@@ -2,10 +2,12 @@ package com.myhons.sensic
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
@@ -23,7 +25,25 @@ class ContextsMenu : AppCompatActivity() {
     private lateinit var viewMood : ConstraintLayout
     private lateinit var viewWeather : ConstraintLayout
     private lateinit var viewMovement : ConstraintLayout
+    private lateinit var viewLocations : ConstraintLayout
 
+
+    var locationName = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if(result.resultCode == RESULT_OK)
+        {
+            val returnData = result.data as Intent
+            val locationLabel = returnData.getStringExtra("locationLetter")
+            val newName = returnData.getStringExtra("name")
+            lateinit var btnToChange : Button
+            when(locationLabel)
+            {
+                "LocationA" -> btnToChange = findViewById(R.id.btnLocationA)
+                "LocationB" -> btnToChange = findViewById(R.id.btnLocationB)
+                "LocationC" -> btnToChange = findViewById(R.id.btnLocationC)
+            }
+            btnToChange.text = newName
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +60,7 @@ class ContextsMenu : AppCompatActivity() {
         viewMood = findViewById(R.id.viewMood)
         viewMovement = findViewById(R.id.viewMovement)
         viewWeather = findViewById(R.id.viewWeather)
-
+        viewLocations = findViewById(R.id.viewLocations)
 
         btnBack.setOnClickListener {
             finish()
@@ -50,11 +70,7 @@ class ContextsMenu : AppCompatActivity() {
             loadScreen("Time", "Time")
         }
 
-        btnLocations.setOnClickListener {
-            loadScreen("Location", "Location")
-        }
-
-        val allViews = arrayOf(viewMood, viewMovement, viewWeather)
+        val allViews = arrayOf(viewMood, viewMovement, viewWeather, viewLocations)
         for(view in allViews)
         {
             val viewType = view.tag.toString()
@@ -62,16 +78,26 @@ class ContextsMenu : AppCompatActivity() {
             {
                 // This declaration has to be made, as nextBtn cannot have .getText() used upon it.
                 val contextBtn = nextBtn as Button
+
+                if(view == viewLocations)
+                {
+                    val locationName = ContextsHandler.getContext<LocationContext>(contextBtn.tag.toString(), "Location").getName()
+                    // Keeps the text preset if a location name hasn't been saved yet.
+                    if(!locationName.contains("Location"))
+                    {
+                        contextBtn.text = locationName
+                    }
+                }
+
                 contextBtn.setOnClickListener {
                     // Load the mood screen with the correct label.
-                    loadScreen(viewType, contextBtn.getText().toString())
+                    loadScreen(viewType, contextBtn.tag.toString())
                 }
             }
         }
 
         // Maps each dropdown button to the view that displays and hides them.
-        val dropdowns = mapOf(btnMoods to viewMood, btnMovement to viewMovement, btnWeather to viewWeather)
-        //
+        val dropdowns = mapOf(btnMoods to viewMood, btnMovement to viewMovement, btnWeather to viewWeather, btnLocations to viewLocations)
         for(button in dropdowns)
         {
            button.key.setOnClickListener {
@@ -90,7 +116,14 @@ class ContextsMenu : AppCompatActivity() {
         val intent = Intent(this, AdjustContext::class.java)
         intent.putExtra("type", label)
         intent.putExtra("name", name)
-        startActivity(intent)
+        if(label == "Location")
+        {
+            locationName.launch(intent)
+        }
+        else
+        {
+            startActivity(intent)
+        }
     }
 
     private fun dropMenu(dropdown : ConstraintLayout)

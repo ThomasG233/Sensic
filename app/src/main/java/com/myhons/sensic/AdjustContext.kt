@@ -114,8 +114,8 @@ class AdjustContext : AppCompatActivity() {
 
                 "Location" -> {
                     locationCoordinates = ContextsHandler.getContext<LocationContext>(name, type).getCoordinates()
-                    val nameToDisplay = ContextsHandler.getContext<LocationContext>("Location", "Location").getName()
-                    if(nameToDisplay != "" && nameToDisplay != "Location")
+                    val nameToDisplay = ContextsHandler.getContext<LocationContext>(name, type).getName()
+                    if(nameToDisplay != "" && !nameToDisplay.contains("Location"))
                     {
                         locationName = nameToDisplay
                     }
@@ -124,12 +124,16 @@ class AdjustContext : AppCompatActivity() {
 
                     btnGetLocation.setOnClickListener {
                         val intent = Intent(this, SelectLocation::class.java)
+                        intent.putExtra("Location", name)
                         coordsFromMap.launch(intent)
                     }
                     btnConfirm.setOnClickListener {
-                        ContextsHandler.getContext<LocationContext>("Location", "Location").setCoordinates(locationCoordinates)
-                        ContextsHandler.getContext<LocationContext>("Location", "Location").setName(locationName)
+                        ContextsHandler.getContext<LocationContext>(name, type).setCoordinates(locationCoordinates)
+                        ContextsHandler.getContext<LocationContext>(name, type).setName(locationName)
                         saveUserPreferences<LocationContext>(name, type)
+                        intent.putExtra("name", locationName)
+                        intent.putExtra("locationLetter", name)
+                        setResult(RESULT_OK, intent)
                         finish()
                     }
                 }

@@ -43,9 +43,8 @@
         android:textAlignment="textStart"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLocations" />
+        app:layout_constraintTop_toBottomOf="@+id/viewLocations" />
 
     <Button
         android:id="@+id/btnTime"
@@ -114,6 +113,7 @@
             android:layout_width="413dp"
             android:layout_height="48dp"
             android:layout_marginTop="2dp"
+            android:tag="Happy"
             android:text="Happy"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -128,6 +128,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Sad"
             android:text="Sad"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -140,6 +141,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Anxious"
             android:text="Anxious"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -152,6 +154,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Angry"
             android:text="Angry"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -164,6 +167,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Energetic"
             android:text="Energetic"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -178,6 +182,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Exhausted"
             android:text="Exhausted"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -191,7 +196,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewWeather"
         android:layout_width="417dp"
-        android:layout_height="144dp"
+        android:layout_height="192dp"
         android:background="@color/grey"
         android:tag="Weather"
         android:visibility="gone"
@@ -205,6 +210,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Sunny"
             android:text="Sunny"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -219,6 +225,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Raining"
             android:text="Raining"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -233,6 +240,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Snowing"
             android:text="Snowing"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -240,7 +248,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnCloudy" />
+
+        <Button
+            android:id="@+id/btnCloudy"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="413dp"
+            android:layout_height="48dp"
+            android:tag="Cloudy"
+            android:text="Cloudy"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnRain" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -260,6 +284,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="Walking"
             android:text="Walking"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -274,6 +299,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="413dp"
             android:layout_height="48dp"
+            android:tag="On the Road"
             android:text="On the Road"
             android:textAlignment="textStart"
             android:textAllCaps="false"
@@ -282,6 +308,65 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnWalking" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewLocations"
+        android:layout_width="416dp"
+        android:layout_height="144dp"
+        android:background="@color/grey"
+        android:tag="Location"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLocations">
+
+        <Button
+            android:id="@+id/btnLocationA"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="413dp"
+            android:layout_height="48dp"
+            android:tag="LocationA"
+            android:text="My First Saved Location"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnLocationB"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="413dp"
+            android:layout_height="48dp"
+            android:tag="LocationB"
+            android:text="My Second Saved Location"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLocationA" />
+
+        <Button
+            android:id="@+id/btnLocationC"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="413dp"
+            android:layout_height="48dp"
+            android:tag="LocationC"
+            android:text="My Third Saved Location"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLocationB" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

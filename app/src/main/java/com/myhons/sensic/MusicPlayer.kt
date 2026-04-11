@@ -2,6 +2,7 @@ package com.myhons.sensic
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -9,11 +10,14 @@ import androidx.core.view.WindowInsetsCompat
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp
 import com.spotify.protocol.types.Track
+import com.spotify.protocol.client.Subscription
+import com.spotify.protocol.types.PlayerState
 
 
 private const val CLIENT_ID = "b36bc5a934fc4cc79633c26420b3d0d7"
-private const val REDIRECT_URI = "com.myhons.sensic://callback"
+private const val REDIRECT_URI = "sensic://callback"
 private var spotifyAppRemote: SpotifyAppRemote? = null
 
 class MusicPlayer : AppCompatActivity() {
@@ -44,11 +48,19 @@ class MusicPlayer : AppCompatActivity() {
             }
 
             override fun onFailure(throwable: Throwable) {
-                Log.e("MusicPlayer", throwable.message, throwable)
-                // Something went wrong when attempting to connect! Handle errors here
+                if(throwable is CouldNotFindSpotifyApp)
+                {
+                    Toast.makeText(applicationContext, "Cannot play without Spotify installed. Please install Spotify.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else
+                {
+                    Log.e("Throwable", "$throwable")
+                }
             }
         })
     }
+
 
     private fun connected() {
         // Then we will write some more code here.
