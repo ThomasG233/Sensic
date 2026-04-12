@@ -135,12 +135,6 @@ class Time(private var hour : Int, private var minute : Int) : Serializable
 
 class Coordinates(private var latitude : Double, private var longitude : Double) : Serializable
 {
-    fun setCoordinates(latitude : Double, longitude: Double)
-    {
-        this.latitude = latitude
-        this.longitude = longitude
-    }
-
     fun getLatitude() : Double
     {
         return latitude

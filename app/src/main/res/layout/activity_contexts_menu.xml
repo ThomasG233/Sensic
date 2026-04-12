@@ -7,366 +7,354 @@
     android:layout_height="match_parent"
     tools:context=".ContextsMenu">
 
-    <Button
-        android:id="@+id/btnMoods"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="413dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:text="Moods"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMyContexts" />
-
-    <Button
-        android:id="@+id/btnLocations"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="413dp"
-        android:layout_height="48dp"
-        android:text="Locations"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewMood" />
-
-    <Button
-        android:id="@+id/btnWeather"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="413dp"
-        android:layout_height="48dp"
-        android:text="Weather"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewLocations" />
-
-    <Button
-        android:id="@+id/btnTime"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="413dp"
-        android:layout_height="48dp"
-        android:text="Time"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewMovement" />
-
-    <Button
-        android:id="@+id/btnMovement"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="413dp"
-        android:layout_height="48dp"
-        android:text="Movement"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewWeather" />
-
     <TextView
         android:id="@+id/tvMyContexts"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="My Contexts"
+        android:layout_height="50dp"
+        android:layout_marginTop="35dp"
+        android:text="Contexts"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="40sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnBack"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="18dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:contentDescription="An arrow, pointing to the left, signalling to go back to the previous screen."
         android:rotation="90"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvMyContexts"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/arrow_down_float" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewMood"
-        android:layout_width="414dp"
-        android:layout_height="288dp"
-        android:background="@color/grey"
-        android:tag="Mood"
-        android:visibility="gone"
+    <ScrollView
+        android:layout_width="410dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnMoods">
+        app:layout_constraintTop_toBottomOf="@+id/tvMyContexts"
+        app:layout_constraintVertical_bias="1.0">
 
-        <Button
-            android:id="@+id/btnDropdownHappy"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="2dp"
-            android:tag="Happy"
-            android:text="Happy"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.25"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnDropdownSad"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Sad"
-            android:text="Sad"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@+id/btnDropdownHappy"
-            app:layout_constraintTop_toBottomOf="@+id/btnDropdownHappy" />
+            <Button
+                android:id="@+id/btnMoods"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="413dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="0dp"
+                android:text="Moods"
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
 
-        <Button
-            android:id="@+id/btnDropdownAnxious"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Anxious"
-            android:text="Anxious"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@+id/btnDropdownSad"
-            app:layout_constraintTop_toBottomOf="@+id/btnDropdownSad" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/viewMood"
+                android:layout_width="414dp"
+                android:layout_height="288dp"
+                android:background="@color/grey"
+                android:tag="Mood"
+                android:visibility="gone">
 
-        <Button
-            android:id="@+id/btnDropdownAngry"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Angry"
-            android:text="Angry"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@+id/btnDropdownAnxious"
-            app:layout_constraintTop_toBottomOf="@+id/btnDropdownAnxious" />
+                <Button
+                    android:id="@+id/btnDropdownHappy"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="2dp"
+                    android:tag="Happy"
+                    android:text="Happy"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.25"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btnDropdownEnergetic"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Energetic"
-            android:text="Energetic"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/btnDropdownAngry"
-            app:layout_constraintTop_toBottomOf="@+id/btnDropdownAngry" />
+                <Button
+                    android:id="@+id/btnDropdownSad"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Sad"
+                    android:text="Sad"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="@+id/btnDropdownHappy"
+                    app:layout_constraintTop_toBottomOf="@+id/btnDropdownHappy" />
 
-        <Button
-            android:id="@+id/btnDropdownExhausted"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Exhausted"
-            android:text="Exhausted"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/btnDropdownEnergetic"
-            app:layout_constraintTop_toBottomOf="@+id/btnDropdownEnergetic" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/btnDropdownAnxious"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Anxious"
+                    android:text="Anxious"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="@+id/btnDropdownSad"
+                    app:layout_constraintTop_toBottomOf="@+id/btnDropdownSad" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewWeather"
-        android:layout_width="417dp"
-        android:layout_height="192dp"
-        android:background="@color/grey"
-        android:tag="Weather"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnWeather">
+                <Button
+                    android:id="@+id/btnDropdownAngry"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Angry"
+                    android:text="Angry"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="@+id/btnDropdownAnxious"
+                    app:layout_constraintTop_toBottomOf="@+id/btnDropdownAnxious" />
 
-        <Button
-            android:id="@+id/btnSunny"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Sunny"
-            android:text="Sunny"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:id="@+id/btnDropdownEnergetic"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Energetic"
+                    android:text="Energetic"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/btnDropdownAngry"
+                    app:layout_constraintTop_toBottomOf="@+id/btnDropdownAngry" />
 
-        <Button
-            android:id="@+id/btnRain"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Raining"
-            android:text="Raining"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnSunny" />
+                <Button
+                    android:id="@+id/btnDropdownExhausted"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Exhausted"
+                    android:text="Exhausted"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/btnDropdownEnergetic"
+                    app:layout_constraintTop_toBottomOf="@+id/btnDropdownEnergetic" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/btnSnow"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Snowing"
-            android:text="Snowing"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnCloudy" />
+            <Button
+                android:id="@+id/btnLocations"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="413dp"
+                android:layout_height="48dp"
+                android:text="Locations"
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
 
-        <Button
-            android:id="@+id/btnCloudy"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Cloudy"
-            android:text="Cloudy"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnRain" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/viewLocations"
+                android:layout_width="416dp"
+                android:layout_height="144dp"
+                android:background="@color/grey"
+                android:tag="Location"
+                android:visibility="gone">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/btnLocationA"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="LocationA"
+                    android:text="My First Saved Location"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewMovement"
-        android:layout_width="416dp"
-        android:layout_height="94dp"
-        android:background="@color/grey"
-        android:tag="Movement"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnMovement">
+                <Button
+                    android:id="@+id/btnLocationB"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="LocationB"
+                    android:text="My Second Saved Location"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnLocationA" />
 
-        <Button
-            android:id="@+id/btnWalking"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="Walking"
-            android:text="Walking"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:id="@+id/btnLocationC"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="LocationC"
+                    android:text="My Third Saved Location"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnLocationB" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/btnTravellling"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="On the Road"
-            android:text="On the Road"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnWalking" />
+            <Button
+                android:id="@+id/btnWeather"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="413dp"
+                android:layout_height="48dp"
+                android:text="Weather"
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/viewWeather"
+                android:layout_width="417dp"
+                android:layout_height="192dp"
+                android:background="@color/grey"
+                android:tag="Weather"
+                android:visibility="gone">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewLocations"
-        android:layout_width="416dp"
-        android:layout_height="144dp"
-        android:background="@color/grey"
-        android:tag="Location"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLocations">
+                <Button
+                    android:id="@+id/btnSunny"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Sunny"
+                    android:text="Sunny"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btnLocationA"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="LocationA"
-            android:text="My First Saved Location"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:id="@+id/btnRain"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Raining"
+                    android:text="Raining"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnSunny" />
 
-        <Button
-            android:id="@+id/btnLocationB"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="LocationB"
-            android:text="My Second Saved Location"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLocationA" />
+                <Button
+                    android:id="@+id/btnSnow"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Snowing"
+                    android:text="Snowing"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnCloudy" />
 
-        <Button
-            android:id="@+id/btnLocationC"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="413dp"
-            android:layout_height="48dp"
-            android:tag="LocationC"
-            android:text="My Third Saved Location"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLocationB" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/btnCloudy"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Cloudy"
+                    android:text="Cloudy"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnRain" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btnMovement"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="413dp"
+                android:layout_height="48dp"
+                android:text="Movement"
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/viewMovement"
+                android:layout_width="416dp"
+                android:layout_height="94dp"
+                android:background="@color/grey"
+                android:tag="Movement"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnWalking"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="Walking"
+                    android:text="Walking"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnTravellling"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="413dp"
+                    android:layout_height="48dp"
+                    android:tag="On the Road"
+                    android:text="On the Road"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnWalking" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btnTime"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="413dp"
+                android:layout_height="48dp"
+                android:text="Time"
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.myhons.sensic
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
@@ -13,11 +14,14 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.content.edit
+import kotlin.apply
 
 class AppSettings : AppCompatActivity() {
 
     private lateinit var btnBack : ImageButton
     private lateinit var btnResetContexts : Button
+    private lateinit var btnUnlink : Button
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var switchTheme : Switch
     private val backPressed = object : OnBackPressedCallback(false)
     {
@@ -41,6 +45,7 @@ class AppSettings : AppCompatActivity() {
 
         btnBack = findViewById(R.id.btnBack)
         btnResetContexts = findViewById(R.id.btnResetContexts)
+        btnUnlink = findViewById(R.id.btnUnlink)
         switchTheme = findViewById(R.id.switchTheme)
 
         if(sharedPreferences.getBoolean("darkTheme", false))
@@ -51,9 +56,20 @@ class AppSettings : AppCompatActivity() {
             finish()
         }
 
+        btnUnlink.setOnClickListener {
+            sharedPreferences.edit{
+                apply()
+                {
+                    putString("accessToken", "")
+                    putString("refreshToken", "")
+                }
+            }
+            Toast.makeText(applicationContext, "Unlinked from Spotify.", Toast.LENGTH_SHORT).show()
+        }
+
         btnResetContexts.setOnClickListener {
             ContextsHandler.resetAllToDefault(applicationContext)
-            Toast.makeText(applicationContext, "All contexts reset to default!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "All contexts reset to default.", Toast.LENGTH_SHORT).show()
         }
         switchTheme.setOnCheckedChangeListener { button, bool ->
             if(button.isChecked)

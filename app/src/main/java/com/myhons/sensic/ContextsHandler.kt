@@ -26,41 +26,13 @@ object ContextsHandler {
     private val movementTypes = arrayOf("Walking", "On the Road")
     private val genres = arrayOf("Chill", "Classical", "EDM", "Folk", "K-Pop", "Lo-Fi", "Metal", "Pop", "Rock", "Sleep")
 
-    fun getMoodTypes() : Array<String>
-    {
-        return moodTypes
-    }
-
-    fun getWeatherTypes() : Array<String>
-    {
-        return weatherTypes
-    }
-    fun getMovementTypes() : Array<String>
-    {
-        return movementTypes
-    }
     fun getGenres() : Array<String>
     {
         return genres
     }
 
-    /**
-     * Returns a saved context from the handler.
-     * @param contextName: the name of the context to be edited.
-     * @param contextType: used to find the context.
-     * @return the desired MusicContext object.
-     */
-    fun <T> getContext(contextName : String, contextType : String): T
-    {
-        return when(contextType) {
-            "Mood" -> moods[contextName]
-            "Weather" -> weather[contextName]
-            "Movement" -> movement[contextName]
-            "Time" -> time
-            "Location" -> locations[contextName]
-            else -> null
-        } as T
-    }
+
+
 
     fun setCurrentActivity(activity : String)
     {
@@ -89,16 +61,33 @@ object ContextsHandler {
             "Mood" -> moods[contextName]?.setPreferenceList(newPreferences)
             "Weather" -> weather[contextName]?.setPreferenceList(newPreferences)
             "Movement" -> movement[contextName]?.setPreferenceList(newPreferences)
-            "Time" -> time.setPreferenceList(newPreferences)
             "Location" -> locations[contextName]?.setPreferenceList(newPreferences)
+            "Time" -> time.setPreferenceList(newPreferences)
         }
+    }
+    /**
+     * Returns a saved context from the handler.
+     * @param contextName: the name of the context to be edited.
+     * @param contextType: used to find the context.
+     * @return the desired MusicContext object.
+     */
+    fun <T> getContext(contextName : String, contextType : String): T
+    {
+        return when(contextType) {
+            "Mood" -> moods[contextName]
+            "Weather" -> weather[contextName]
+            "Movement" -> movement[contextName]
+            "Time" -> time
+            "Location" -> locations[contextName]
+            else -> null
+        } as T
     }
     fun resetAllToDefault(applicationContext : Context)
     {
-        for(mood in moodTypes)
+        for(moodType in moodTypes)
         {
-            moods[mood] = loadDefaultPreferences(mood, "Mood")
-            saveToFile(mood, moods[mood], applicationContext)
+            moods[moodType] = loadDefaultPreferences(moodType, "Mood")
+            saveToFile(moodType, moods[moodType], applicationContext)
         }
         for(climate in weatherTypes)
         {
@@ -112,7 +101,7 @@ object ContextsHandler {
         }
         for(location in locationLabels)
         {
-            locations = loadDefaultPreferences(location, "Location")
+            locations[location] = loadDefaultPreferences(location, "Location")
             saveToFile("Location", locations[location], applicationContext)
         }
 

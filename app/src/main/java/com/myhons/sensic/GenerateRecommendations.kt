@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -67,6 +68,7 @@ class GenerateRecommendations : AppCompatActivity(){
     private lateinit var clRecommendations : ConstraintLayout
     private lateinit var tvCurrentContexts : TextView
     private lateinit var btnCreatePlaylists : Button
+    private lateinit var progressBar : ProgressBar
 
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -76,6 +78,7 @@ class GenerateRecommendations : AppCompatActivity(){
         enableEdgeToEdge()
         setContentView(R.layout.activity_generate_recommendations)
 
+        progressBar = findViewById(R.id.progressBar)
         tvGenerating = findViewById(R.id.tvGenerating)
         tvCurrentContexts = findViewById(R.id.tvCurrentContexts)
         clRecommendations = findViewById(R.id.clRecommendations)
@@ -97,6 +100,7 @@ class GenerateRecommendations : AppCompatActivity(){
         // Get current movement ???
 
         lifecycleScope.launch(Dispatchers.IO) {
+            progressBar.setProgress(0, true)
             val locationObtained = getCurrentLocation()
             if(locationObtained)
             {
@@ -110,8 +114,9 @@ class GenerateRecommendations : AppCompatActivity(){
                             inSavedLocation = location
                         }
                     }
-
+                    progressBar.setProgress(25, true)
                     checkWeatherInLocation()
+
                 }
                 catch (e: Exception)
                 {
@@ -119,6 +124,7 @@ class GenerateRecommendations : AppCompatActivity(){
                 }
             }
             val topGenres = getTopGenres()
+            progressBar.setProgress(50, true)
 
             if(topGenres.isNotEmpty())
             {
@@ -126,21 +132,22 @@ class GenerateRecommendations : AppCompatActivity(){
                     var seeds = ""
                     topGenres.forEach { genre ->
                         val seedToAdd = searchSpotifyForSeed(genre)
-                        if (seedToAdd == "400") {
+                        progressBar.setProgress(75, true)
+                        if(seedToAdd == "400")
+                        {
                             withContext(Dispatchers.Main)
                             {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "You must authenticate with Spotify before you can generate a playlist.",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Toast.makeText(applicationContext, "You must authenticate with Spotify before you can generate a playlist.", Toast.LENGTH_LONG).show()
                                 finish()
                             }
-                        } else if (seedToAdd != "") {
+                        }
+                        else if(seedToAdd != "")
+                        {
                             seeds += "$seedToAdd,"
                         }
                     }
                     seeds = seeds.dropLast(1)
+                    progressBar.setProgress(100, true)
                     val recommendations = getRecommendations(seeds)
                     withContext(Dispatchers.Main)
                     {
@@ -152,12 +159,10 @@ class GenerateRecommendations : AppCompatActivity(){
                         else
                         {
                             tvGenerating.isGone = true
+                            progressBar.isGone = true
                             clRecommendations.isVisible = true
                             tvCurrentContexts.text = currentContexts
-                            val recommendationAdapter = SongListAdapter(
-                                applicationContext,
-                                android.R.layout.simple_list_item_2,
-                                recommendations
+                            val recommendationAdapter = SongListAdapter(applicationContext, android.R.layout.simple_list_item_2, recommendations
                             )
                             listRecommendations.adapter = recommendationAdapter
                             btnCreatePlaylists.setOnClickListener {
@@ -186,12 +191,14 @@ class GenerateRecommendations : AppCompatActivity(){
                 }
                 catch(e: Exception)
                 {
-                    Log.e("Error", "$e")
+                    progressBar.setProgress(100, true)
+                    Toast.makeText(applicationContext, "An error occurred: $e", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
             else
             {
+                progressBar.setProgress(100, true)
                 withContext(Dispatchers.Main)
                 {
                     Toast.makeText(applicationContext, "No genres selected for your current contexts.", Toast.LENGTH_SHORT).show()
@@ -264,19 +271,19 @@ class GenerateRecommendations : AppCompatActivity(){
 
         val moodContext = ContextsHandler.getContext<MusicContext>(mood, "Mood").getPreferenceList()
         currentContexts = "Feeling $mood"
-        addWeightsToOptions(moodContext, genreWeights)
+        addWeightsToOptions(moodContext, genreWeights, 10)
         currentActivity = ContextsHandler.getCurrentActivity()
         if(currentActivity != "")
         {
             val activityPreferences = ContextsHandler.getContext<MusicContext>(currentActivity, "Movement").getPreferenceList()
-            addWeightsToOptions(activityPreferences, genreWeights)
-            currentContexts += " whilst ${currentActivity.lowercase()} "
+            addWeightsToOptions(activityPreferences, genreWeights, 15)
+            currentContexts += " whilst ${currentActivity.lowercase()}"
         }
         if(inTimeRange)
         {
             val timeContext = ContextsHandler.getContext<TimeContext>("Time", "Time")
             val timePreferences = timeContext.getPreferenceList()
-            addWeightsToOptions(timePreferences, genreWeights)
+            addWeightsToOptions(timePreferences, genreWeights, 15)
             currentContexts += " between ${timeContext.getStartText()} & ${timeContext.getEndText()}"
         }
         if(inSavedLocation != "")
@@ -284,13 +291,13 @@ class GenerateRecommendations : AppCompatActivity(){
             val locationContext = ContextsHandler.getContext<LocationContext>(inSavedLocation, "Location")
             val locationPreferences = locationContext.getPreferenceList()
             val locationName = locationContext.getName()
-            addWeightsToOptions(locationPreferences, genreWeights)
+            addWeightsToOptions(locationPreferences, genreWeights, 20)
             currentContexts += " at $locationName"
         }
         if(weather != "")
         {
             val weatherPreferences = ContextsHandler.getContext<MusicContext>(weather, "Weather").getPreferenceList()
-            addWeightsToOptions(weatherPreferences, genreWeights)
+            addWeightsToOptions(weatherPreferences, genreWeights, 20)
             currentContexts += ", currently $weather"
         }
         currentContexts += "."
@@ -310,7 +317,7 @@ class GenerateRecommendations : AppCompatActivity(){
         return preferredGenres
     }
 
-    private fun addWeightsToOptions(preferences : Map<String, Boolean>, genres : MutableMap<String, Int>)
+    private fun addWeightsToOptions(preferences : Map<String, Boolean>, genres : MutableMap<String, Int>, weightToAdd : Int)
     {
         preferences.forEach { (genreName, selected) ->
             if(selected)
@@ -320,7 +327,7 @@ class GenerateRecommendations : AppCompatActivity(){
                 {
                     newWeight = genres[genreName] as Int
                 }
-                newWeight += 10
+                newWeight += weightToAdd
                 genres[genreName] = newWeight
             }
         }

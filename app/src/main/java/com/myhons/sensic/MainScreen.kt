@@ -27,10 +27,9 @@ import kotlin.coroutines.resume
 class MainScreen : AppCompatActivity() {
 
     private lateinit var btnStart: Button
-    private lateinit var btnAuth: Button
     private lateinit var btnSettings : Button
     private lateinit var btnContexts: Button
-    private lateinit var btnPlayer : Button
+    private lateinit var btnAbout : Button
 
     private lateinit var activityIntent : PendingIntent
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -43,39 +42,45 @@ class MainScreen : AppCompatActivity() {
 
 
         btnStart = findViewById(R.id.btnStart)
-        btnAuth = findViewById(R.id.btnAuth)
         btnSettings = findViewById(R.id.btnSettings)
         btnContexts = findViewById(R.id.btnContexts)
+        btnAbout = findViewById(R.id.btnAbout)
         btnStart.setOnClickListener {
-            val intent = Intent(this, GenerateRecommendations::class.java)
-            startActivity(intent)
-        }
-        btnPlayer = findViewById(R.id.btnPlayer)
-        btnAuth.setOnClickListener {
+            val sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
+            // Authenticate, if not already authenticated.
+            if(sharedPreferences.getString("accessToken", "") == "")
+            {
+                val clientID = PKCEHandler.getClientID()
+                val redirectUri = PKCEHandler.getRedirectUri()
+                val challenge = PKCEHandler.getCodeChallenge(64)
 
-            val clientID = PKCEHandler.getClientID()
-            val redirectUri = PKCEHandler.getRedirectUri()
-            val challenge = PKCEHandler.getCodeChallenge(64)
+                val authenticateIntent = Intent(Intent.ACTION_VIEW,
+                    ("https://accounts.spotify.com/authorize?response_type=code&client_id=$clientID" +
+                            "&scope=playlist-modify-public playlist-modify-private " +
+                            "&code_challenge_method=S256" +
+                            "&code_challenge=$challenge" +
+                            "&redirect_uri=$redirectUri").toUri())
+                startActivity(authenticateIntent)
+            }
+            else
+            {
+                val intent = Intent(this, GenerateRecommendations::class.java)
+                startActivity(intent)
+            }
 
-            val authenticateIntent = Intent(Intent.ACTION_VIEW,
-                ("https://accounts.spotify.com/authorize?response_type=code&client_id=$clientID" +
-                        "&scope=playlist-modify-public playlist-modify-private " +
-                        "&code_challenge_method=S256" +
-                        "&code_challenge=$challenge" +
-                        "&redirect_uri=$redirectUri").toUri())
-            startActivity(authenticateIntent)
         }
 
-        btnPlayer.setOnClickListener {
-            val intent = Intent(this, MusicPlayer::class.java)
-            startActivity(intent)
-        }
         btnSettings.setOnClickListener {
             val intent = Intent(this, AppSettings::class.java)
             startActivity(intent)
         }
         btnContexts.setOnClickListener {
             val intent = Intent(this, ContextsMenu::class.java)
+            startActivity(intent)
+        }
+
+        btnAbout.setOnClickListener {
+            val intent = Intent(this, AppInformation::class.java)
             startActivity(intent)
         }
 
@@ -115,13 +120,8 @@ class MainScreen : AppCompatActivity() {
         }
         else
         {
-            val task = ActivityRecognition.getClient(this).requestActivityUpdates(20000, activityIntent)
-            task.addOnSuccessListener {
-                Log.d("ActivityCollection", "Now collecting current activity.")
-            }
-            task.addOnFailureListener { e: Exception ->
-                Log.e("ActivityCollection", "Unable to collect current activity. ${e.message}")
-            }
+            // Register for activity updates every 10 seconds.
+            ActivityRecognition.getClient(this).requestActivityUpdates(10000, activityIntent)
         }
     }
 

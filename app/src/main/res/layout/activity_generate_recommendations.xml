@@ -19,7 +19,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.473" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="300dp"
+        android:layout_height="27dp"
+        android:scrollbarSize="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvGenerating"
+        app:layout_constraintStart_toStartOf="@+id/tvGenerating"
+        app:layout_constraintTop_toBottomOf="@+id/tvGenerating" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clRecommendations"
@@ -81,4 +92,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

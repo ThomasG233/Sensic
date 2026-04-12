@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.activity.enableEdgeToEdge
@@ -32,7 +33,7 @@ class AdjustContext : AppCompatActivity() {
     private lateinit var btnBack : ImageButton
     private lateinit var tvDescriptor : TextView
     private lateinit var tvTitle : TextView
-    private lateinit var genres : ConstraintLayout
+    private lateinit var genres : LinearLayout
     private lateinit var viewTime : ConstraintLayout
 
     private lateinit var timePickerStart : TimePicker
