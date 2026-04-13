@@ -119,6 +119,8 @@ class AdjustContext : AppCompatActivity() {
                 }
 
                 "Location" -> {
+                    // Removes the letter that is passed through so that the title only reads as "Location"
+                    tvTitle.text = tvTitle.text.dropLast(1)
                     locationCoordinates = ContextsHandler.getContext<LocationContext>(name, type).getCoordinates()
                     val nameToDisplay = ContextsHandler.getContext<LocationContext>(name, type).getName()
                     if(nameToDisplay != "" && !nameToDisplay.contains("Location"))
