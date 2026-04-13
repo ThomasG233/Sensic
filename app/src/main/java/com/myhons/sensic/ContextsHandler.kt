@@ -23,7 +23,7 @@ object ContextsHandler {
     private val moodTypes = arrayOf("Happy", "Sad", "Anxious", "Angry", "Energetic", "Exhausted")
     private val locationLabels = arrayOf("LocationA", "LocationB", "LocationC")
     private val weatherTypes = arrayOf("Sunny", "Cloudy", "Raining", "Snowing")
-    private val movementTypes = arrayOf("Walking", "On the Road")
+    private val movementTypes = arrayOf("Walking", "On the Road", "Lounging")
     private val genres = arrayOf("Chill", "Classical", "EDM", "Folk", "K-Pop", "Lo-Fi", "Metal", "Pop", "Rock", "Sleep")
 
     fun getGenres() : Array<String>

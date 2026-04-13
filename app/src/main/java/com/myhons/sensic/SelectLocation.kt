@@ -43,7 +43,6 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var searchView : SearchView
     private var geoCoder = Geocoder(this, Locale.getDefault())
     private var coordsToReturn = LatLng(0.0,0.0)
-    private var contextToLoad = ""
     private var locationName = ""
 
 
@@ -56,13 +55,13 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
         map = findViewById(R.id.map)
         searchView = findViewById(R.id.searchView)
 
-        contextToLoad = intent.getStringExtra("Location") as String
+        val parsedLatitude = intent.getDoubleExtra("latitude", 0.0)
+        val parsedLongitude = intent.getDoubleExtra("longitude", 0.0)
 
-        val savedCoordinates = ContextsHandler.getContext<LocationContext>(contextToLoad, "Location").getCoordinates()
-        coordsToReturn = LatLng(savedCoordinates.getLatitude(), savedCoordinates.getLongitude())
+        coordsToReturn = LatLng(parsedLatitude, parsedLongitude)
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
 
-        val locationManager = applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = applicationContext.getSystemService(LOCATION_SERVICE) as LocationManager
         val gpsEnabled = locationManager.isProviderEnabled(GPS_PROVIDER)
         if(coordsToReturn.latitude == 0.0 && coordsToReturn.longitude == 0.0)
         {
@@ -74,7 +73,6 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
             {
                 initialiseMap()
             }
-
         }
         else
         {
@@ -89,9 +87,7 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
             }
             initialiseMap()
         }
-
         btnConfirmLocation.setOnClickListener {
-            ContextsHandler.getContext<LocationContext>(contextToLoad, "Location").setCoordinates(coordsToReturn.latitude, coordsToReturn.longitude)
             intent.putExtra("latitude", coordsToReturn.latitude)
             intent.putExtra("longitude", coordsToReturn.longitude)
             if(locationName == "Your Current Location")
@@ -106,7 +102,6 @@ class SelectLocation : AppCompatActivity(), OnMapReadyCallback {
                 {
                     locationName = "this saved location"
                 }
-
             }
             intent.putExtra("name", locationName)
             setResult(RESULT_OK, intent)

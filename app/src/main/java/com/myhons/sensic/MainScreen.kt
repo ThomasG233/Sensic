@@ -2,9 +2,11 @@ package com.myhons.sensic
 
 import android.Manifest
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -121,7 +123,7 @@ class MainScreen : AppCompatActivity() {
         else
         {
             // Register for activity updates every 10 seconds.
-            ActivityRecognition.getClient(this).requestActivityUpdates(10000, activityIntent)
+            ActivityRecognition.getClient(this).requestActivityUpdates(20000, activityIntent)
         }
     }
 

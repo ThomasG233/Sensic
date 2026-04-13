@@ -23,6 +23,7 @@ class AppSettings : AppCompatActivity() {
     private lateinit var btnUnlink : Button
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var switchTheme : Switch
+    private lateinit var switchPrivacy : Switch
     private val backPressed = object : OnBackPressedCallback(false)
     {
         override fun handleOnBackPressed() {
@@ -47,12 +48,20 @@ class AppSettings : AppCompatActivity() {
         btnResetContexts = findViewById(R.id.btnResetContexts)
         btnUnlink = findViewById(R.id.btnUnlink)
         switchTheme = findViewById(R.id.switchTheme)
+        switchPrivacy = findViewById(R.id.switchPrivacy)
 
         if(sharedPreferences.getBoolean("darkTheme", false))
         {
             switchTheme.isChecked = true
+
         }
+        if(sharedPreferences.getBoolean("hideLocation", true))
+        {
+            switchPrivacy.isChecked = true
+        }
+
         btnBack.setOnClickListener {
+            saveSettings()
             finish()
         }
 
@@ -71,7 +80,7 @@ class AppSettings : AppCompatActivity() {
             ContextsHandler.resetAllToDefault(applicationContext)
             Toast.makeText(applicationContext, "All contexts reset to default.", Toast.LENGTH_SHORT).show()
         }
-        switchTheme.setOnCheckedChangeListener { button, bool ->
+        switchTheme.setOnCheckedChangeListener { button, _ ->
             if(button.isChecked)
             {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -82,6 +91,7 @@ class AppSettings : AppCompatActivity() {
             }
             saveSettings()
         }
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -96,6 +106,7 @@ class AppSettings : AppCompatActivity() {
             apply()
             {
                 putBoolean("darkTheme", switchTheme.isChecked)
+                putBoolean("hideLocation", switchPrivacy.isChecked)
             }
         }
     }

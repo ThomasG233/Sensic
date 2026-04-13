@@ -10,8 +10,7 @@
     <TextView
         android:id="@+id/tvMyContexts"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginTop="35dp"
+        android:layout_height="wrap_content"
         android:text="Settings"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="40sp"
@@ -19,8 +18,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnBack"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
 
     <ImageButton
         android:id="@+id/btnBack"
@@ -37,11 +35,12 @@
     <Button
         android:id="@+id/btnUnlink"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="413dp"
-        android:layout_height="48dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="Unlink from Spotify"
         android:textAlignment="textStart"
+        android:textAllCaps="false"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -51,11 +50,12 @@
     <Button
         android:id="@+id/btnResetContexts"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="413dp"
-        android:layout_height="48dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Reset My Contexts"
+        android:text="Reset my Contexts"
         android:textAlignment="textStart"
+        android:textAllCaps="false"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -64,18 +64,37 @@
 
     <Switch
         android:id="@+id/switchTheme"
-        android:layout_width="364dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="24dp"
         android:checked="false"
+        android:fontFamily="sans-serif-medium"
         android:showText="false"
         android:splitTrack="false"
         android:text="Dark Mode"
         android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnUnlink"
         tools:checked="false" />
+
+    <Switch
+        android:id="@+id/switchPrivacy"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="sans-serif-medium"
+        android:showText="false"
+        android:splitTrack="false"
+        android:text="Hide my Location in Spotify Playlist Name"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchTheme"
+        tools:checked="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

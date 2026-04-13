@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TimePicker
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +43,8 @@ class AdjustContext : AppCompatActivity() {
     private var genresSelected = 0
     private var preferencesEnabled = true
 
+
+
     private var locationCoordinates = Coordinates(0.0, 0.0)
     private var locationName = "this location"
     var coordsFromMap = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -57,10 +60,12 @@ class AdjustContext : AppCompatActivity() {
             Log.d("LOCATION", "Returned Coordinates: $latitude, $longitude")
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_adjust_context)
+
         val type = intent.getStringExtra("type") as String
         val name = intent.getStringExtra("name") as String
 
@@ -126,6 +131,8 @@ class AdjustContext : AppCompatActivity() {
                     btnGetLocation.setOnClickListener {
                         val intent = Intent(this, SelectLocation::class.java)
                         intent.putExtra("Location", name)
+                        intent.putExtra("latitude", locationCoordinates.getLatitude())
+                        intent.putExtra("longitude", locationCoordinates.getLongitude())
                         coordsFromMap.launch(intent)
                     }
                     btnConfirm.setOnClickListener {

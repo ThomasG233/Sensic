@@ -26,7 +26,7 @@ class SongListAdapter(context : Context, private val resource : Int, objects: Ar
     override fun getView(position : Int, convertView : View?, parent : ViewGroup) : View
     {
         val songName = getItem(position)?.getTrackName()
-        val artistName = getItem(position)?.getArtistName()
+        val artistNames = getItem(position)?.getArtistNames()
 
         val inflater = LayoutInflater.from(context)
         val viewConvert = inflater.inflate(resource, parent, false)
@@ -49,7 +49,7 @@ class SongListAdapter(context : Context, private val resource : Int, objects: Ar
         firstLine.setTextColor(context.resources.getColor(colourToUse, context.theme))
         secondLine.setTextColor(context.resources.getColor(colourToUse, context.theme))
         firstLine.text = songName
-        secondLine.text = artistName
+        secondLine.text = artistNames
 
         firstLine.setTypeface(Typeface.DEFAULT_BOLD)
 

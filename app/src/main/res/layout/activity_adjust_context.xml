@@ -10,8 +10,10 @@
     <Button
         android:id="@+id/btnConfirm"
         style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="325dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/grey"
         android:text="Confirm Changes"
@@ -26,7 +28,7 @@
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:text="[Context]"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="40sp"
@@ -50,8 +52,11 @@
 
     <ScrollView
         android:id="@+id/svGenres"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +65,7 @@
 
         <LinearLayout
             android:id="@+id/genres"
-            android:layout_width="325dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -189,19 +194,22 @@
 
     <TextView
         android:id="@+id/tvDescriptor"
-        android:layout_width="325dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="33dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         tools:text="[Tag]" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewTimeOptions"
-        android:layout_width="325dp"
-        android:layout_height="75dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -211,7 +219,6 @@
             android:id="@+id/tvFromLabel2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:text="From"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -220,12 +227,14 @@
 
         <TimePicker
             android:id="@+id/timePickerStart"
-            android:layout_width="135dp"
+            android:layout_width="0dp"
             android:layout_height="75dp"
             android:layout_marginStart="8dp"
             android:padding="0dp"
             android:timePickerMode="spinner"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvToLabel2"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/tvFromLabel2"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
@@ -234,21 +243,22 @@
             android:id="@+id/tvToLabel2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
             android:text="To"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/timePickerEnd"
             app:layout_constraintStart_toEndOf="@+id/timePickerStart"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TimePicker
             android:id="@+id/timePickerEnd"
-            android:layout_width="135dp"
-            android:layout_height="75dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:padding="0dp"
             android:timePickerMode="spinner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvToLabel2"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>

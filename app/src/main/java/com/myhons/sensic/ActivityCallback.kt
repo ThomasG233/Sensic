@@ -26,6 +26,9 @@ class ActivityCallback : BroadcastReceiver() {
                 DetectedActivity.IN_VEHICLE -> {
                     ContextsHandler.setCurrentActivity("On the Road")
                 }
+                DetectedActivity.STILL -> {
+                    ContextsHandler.setCurrentActivity("Lounging")
+                }
                 else -> {
                     ContextsHandler.setCurrentActivity("")
                 }
