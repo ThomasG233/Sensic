@@ -46,8 +46,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("com.spotify.android:auth:1.2.5")  // Maven dependency
-    implementation(files("../spotify-app-remote-release-0.8.0.aar"))    // Spotify SDK.
     implementation("androidx.browser:browser:1.0.0")
     implementation ("com.google.code.gson:gson:2.13.2")
     implementation(libs.androidx.lifecycle.runtime.ktx)
