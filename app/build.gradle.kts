@@ -39,12 +39,6 @@ android {
         viewBinding = true
     }
 }
-/*
-repositories {
-    mavenCentral()
-}
-*/
-
 
 dependencies {
     implementation(libs.androidx.core.ktx)
