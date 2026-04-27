@@ -1,2 +1,3 @@
-# Sensic
-My honours project.
+# Sensic: Honours Project
+Sensic is a Context-Aware Music Application designed to take in your current contexts, such as your mood, location, weather and activity. Based on this information and your own preferences provided to the app, the app will aim to generate recommendations geared towards what you want to hear in these given contexts.
+To tailor the experience to fit your tastes, you can start by personalising your contexts so that recommendations align closer to what you want to hear. By providing this information, the application can build up an understanding of your listening preferences. Once you're satisfied with the edits you've made, you can tap "Get Recommendations" in order to get songs that align with your genre choices.
