@@ -7,6 +7,9 @@ import android.util.Base64
 
 // Spotify's PKCE flow for web version. https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
 // The PKCE flow was adapted with the assistance of SecureAuth: https://docs.secureauth.com/iam/build-an-android-app-using-oauth-2-0-and-pkce
+/**
+ * Handles the entire PKCE flow.
+ */
 object PKCEHandler
 {
 
@@ -15,7 +18,8 @@ object PKCEHandler
     private var verifier = ""
 
     /**
-     *
+     * Gets the Client ID, which identifies the application on Spotify.
+     * @return the Client ID.
      */
     fun getClientID() : String
     {
@@ -23,7 +27,8 @@ object PKCEHandler
     }
 
     /**
-     *
+     * Gets the redirect URI, used by Spotify during authentication.
+     * @return the Redirect URI.
      */
     fun getRedirectUri() : String
     {
@@ -32,7 +37,7 @@ object PKCEHandler
 
     /**
      * Getter Function for the Code Verifier.
-     * @return verifier
+     * @return the verifier for the challenge, used to verify the application to Spotify.
      */
     fun getCodeVerifier() : String
     {

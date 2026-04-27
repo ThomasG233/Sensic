@@ -7,8 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
+/**
+ * Displays information about the app.
+ */
 class AppInformation : AppCompatActivity() {
 
+    // Initialise the only UI element on this screen.
     private lateinit var btnBackToMenu : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +20,10 @@ class AppInformation : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_app_information)
 
+        // Initialise the back button.
         btnBackToMenu = findViewById(R.id.btnBackToMenu)
         btnBackToMenu.setOnClickListener {
+            // Return to main menu when clicked.
             finish()
         }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
