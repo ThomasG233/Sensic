@@ -46,9 +46,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("com.spotify.android:auth:1.2.5")  // Maven dependency
-    implementation(files("../spotify-app-remote-release-0.8.0.aar"))    // Spotify SDK.
-    // All other dependencies for your app should also be here:
     implementation("androidx.browser:browser:1.0.0")
     implementation ("com.google.code.gson:gson:2.13.2")
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -63,11 +60,9 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-
     implementation("com.google.android.gms:play-services-maps")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation(libs.play.services.location)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
