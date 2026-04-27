@@ -2,33 +2,32 @@ package com.myhons.sensic
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
-
-
 private lateinit var sharedPreferences : SharedPreferences
 private lateinit var accessToken : String
+private lateinit var refreshToken : String
 
-private var expiresIn = 0
-
-// Checks to see if the callback URI is called by Spotify.
+/**
+ * Checks to see if the callback URI is called by Spotify.
+ */
 class Authentication : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = getSharedPreferences("accessExpiry", 0)
-
+        // Get the settings so that the access token and refresh token can be saved later.
+        sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
+        // Get the data returned from Spotify.
         val returnData = intent.data
         var obtainingToken = false
         // The coroutine cannot be declared at this stage.
@@ -36,28 +35,33 @@ class Authentication : AppCompatActivity() {
         var toastMessage = "We could not authenticate your account with Spotify. Please try again later."
         // If the callback address has been used.
         if (returnData != null) {
-            Log.d("AUTH", "$returnData")
+            // Check if an error was returned.
             val errorCode = returnData.getQueryParameter("error")
-
+            // If no error was returned, get the authentication code from the return data.
             if (errorCode == null) {
-                // AUTHENTICATION CODE!!!
                 val authCode = returnData.getQueryParameter("code")
                 obtainingToken = true
-                tokenCoroutine = CoroutineScope(Dispatchers.IO).launch {
+                // Launch a coroutine to get the access token.
+                tokenCoroutine = lifecycleScope.launch(Dispatchers.IO) {
                     try
                     {
+                        // Start the request using the authentication code to get the access token.
                         getAccessToken(authCode.toString())
+                        // Save the access & refresh tokens in the settings.
                         sharedPreferences.edit {
                             putString("accessToken", accessToken)
+                            putString("refreshToken", refreshToken)
                         }
                         toastMessage = "Account successfully authenticated!"
                     }
+                    // If the authentication process fails, inform the user.
                     catch (e: Exception)
                     {
                         toastMessage = "Authentication failed. Please try again. ${e.message}"
                     }
                     finally
                     {
+                        // No longer getting a token.
                         obtainingToken = false
                     }
                 }
@@ -72,12 +76,16 @@ class Authentication : AppCompatActivity() {
             }
             tokenCoroutine.cancel()
         }
+        // Inform the user of the result of the authentication.
         Toast.makeText(applicationContext, toastMessage, Toast.LENGTH_LONG).show()
         finish()
     }
 
     // Adapted from https://stackoverflow.com/questions/63876345/how-to-get-access-token-from-spotify-api
-    suspend fun getAccessToken(authCode: String) {
+    /**
+     *
+     */
+    private fun getAccessToken(authCode: String) {
         // Get all needed parameters from the PKCEHandler needed in the post request.
         val verifier = PKCEHandler.getCodeVerifier()
         val redirectUri = PKCEHandler.getRedirectUri()
@@ -102,23 +110,23 @@ class Authentication : AppCompatActivity() {
         // If the request was not successful
         if (postRequest.responseCode !in 200..204)
         {
-            // Read in the error returned from Spotify.
             val stream = postRequest.errorStream
+            // Read in the error returned from Spotify.
             val returnedError = stream.bufferedReader().use { it.readText() }
             val jsonObject = gson.fromJson(returnedError, JsonObject::class.java)
             // Collect the error description from the response JSON.
             val errorDescription = jsonObject.get("error_description").toString()
-            // Close the connection, and return an error.
+            // Close the connection, and return the error.
             postRequest.disconnect()
             throw Exception("Error Code: ${postRequest.responseCode}: $errorDescription")
         }
-        // Collect the response data from Spotify.
         val stream = postRequest.inputStream
+        // Collect the response data from Spotify.
         val response = stream.bufferedReader().use { it.readText() }
         // Collect the access token from the response JSON.
         val jsonObject = gson.fromJson(response, JsonObject::class.java)
-        accessToken = jsonObject.get("access_token").toString()
-        Log.e("Spotify", accessToken)
+        accessToken = jsonObject.get("access_token").asString
+        refreshToken = jsonObject.get("refresh_token").asString
         // Close the connection after use.
         postRequest.disconnect()
     }

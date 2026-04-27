@@ -1,6 +1,5 @@
 package com.myhons.sensic
 
-import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.SecureRandom
 import android.util.Base64
@@ -8,6 +7,9 @@ import android.util.Base64
 
 // Spotify's PKCE flow for web version. https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
 // The PKCE flow was adapted with the assistance of SecureAuth: https://docs.secureauth.com/iam/build-an-android-app-using-oauth-2-0-and-pkce
+/**
+ * Handles the entire PKCE flow.
+ */
 object PKCEHandler
 {
 
@@ -16,7 +18,8 @@ object PKCEHandler
     private var verifier = ""
 
     /**
-     *
+     * Gets the Client ID, which identifies the application on Spotify.
+     * @return the Client ID.
      */
     fun getClientID() : String
     {
@@ -24,7 +27,8 @@ object PKCEHandler
     }
 
     /**
-     *
+     * Gets the redirect URI, used by Spotify during authentication.
+     * @return the Redirect URI.
      */
     fun getRedirectUri() : String
     {
@@ -33,7 +37,7 @@ object PKCEHandler
 
     /**
      * Getter Function for the Code Verifier.
-     * @return verifier
+     * @return the verifier for the challenge, used to verify the application to Spotify.
      */
     fun getCodeVerifier() : String
     {
@@ -61,7 +65,6 @@ object PKCEHandler
      * @param codeLength, the desired length of the code challenge.
      * @return the verifier; a completely random string (64 characters in length)
      */
-    @Throws(UnsupportedEncodingException::class)
     private fun generateCodeVerifier(codeLength : Int) : String
     {
         val rdm = SecureRandom()
@@ -74,7 +77,6 @@ object PKCEHandler
     /**
      * Generates the code challenge using the code verifier, hashed using SHA-256.
      */
-    @Throws(UnsupportedEncodingException::class)
     private fun generateCodeChallenge(codeVerifier : String) : String
     {
         val bytes = codeVerifier.toByteArray(charset("US-ASCII"))

@@ -7,138 +7,275 @@
     android:layout_height="match_parent"
     tools:context=".AdjustContext">
 
+    <Button
+        android:id="@+id/btnConfirm"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/grey"
+        android:text="Confirm Changes"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Mood"
+        android:text="[Context]"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="40sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
 
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:contentDescription="An arrow, pointing to the left, signalling to go back to the previous screen."
         android:rotation="90"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/arrow_down_float" />
+
+    <ScrollView
+        android:id="@+id/svGenres"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnGetLocation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewTimeOptions"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/genres"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/cbChill"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Chill"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbClassical"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Classical"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbEDM"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="EDM"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbDance"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Dance"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbFolk"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Folk"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbKPop"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="K-Pop"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbLofi"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Lo-Fi"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbMetal"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Metal"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbPop"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Pop"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbRock"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Rock"
+                app:useMaterialThemeColors="false" />
+
+            <CheckBox
+                android:id="@+id/cbSleep"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
+                android:checked="false"
+                android:paddingLeft="0dp"
+                android:text="Sleep"
+                app:useMaterialThemeColors="false" />
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/tvDescriptor"
-        android:layout_width="369dp"
-        android:layout_height="23dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="33dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         tools:text="[Tag]" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/genres"
-        android:layout_width="369dp"
-        android:layout_height="564dp"
-        android:layout_marginEnd="2dp"
+        android:id="@+id/viewTimeOptions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tvDescriptor"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDescriptor">
 
-        <CheckBox
-            android:id="@+id/checkBox"
+        <TextView
+            android:id="@+id/tvFromLabel2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Genre1"
+            android:text="From"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <CheckBox
-            android:id="@+id/checkBox4"
+        <TimePicker
+            android:id="@+id/timePickerStart"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="8dp"
+            android:padding="0dp"
+            android:timePickerMode="spinner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvToLabel2"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/tvFromLabel2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvToLabel2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Genre3"
-            app:layout_constraintStart_toStartOf="@+id/checkBox3"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox3" />
+            android:text="To"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/timePickerEnd"
+            app:layout_constraintStart_toEndOf="@+id/timePickerStart"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <CheckBox
-            android:id="@+id/checkBox5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre4"
-            app:layout_constraintStart_toStartOf="@+id/checkBox4"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox4" />
-
-        <CheckBox
-            android:id="@+id/checkBox6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
-
-        <CheckBox
-            android:id="@+id/checkBox7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox8" />
-
-        <CheckBox
-            android:id="@+id/checkBox9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre9"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox7" />
-
-        <CheckBox
-            android:id="@+id/checkBox10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre9"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox9" />
-
-        <CheckBox
-            android:id="@+id/checkBox12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre10"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox10" />
-
-        <CheckBox
-            android:id="@+id/checkBox8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre7"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox6" />
-
-        <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre5"
-            app:layout_constraintStart_toStartOf="@+id/checkBox5"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox5" />
-
-        <CheckBox
-            android:id="@+id/checkBox3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre2"
-            app:layout_constraintStart_toStartOf="@+id/checkBox"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
-
+        <TimePicker
+            android:id="@+id/timePickerEnd"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="0dp"
+            android:timePickerMode="spinner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvToLabel2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnGetLocation"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/grey"
+        android:text="Select Location"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
+        app:layout_constraintEnd_toEndOf="@+id/btnConfirm"
+        app:layout_constraintStart_toStartOf="@+id/btnConfirm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

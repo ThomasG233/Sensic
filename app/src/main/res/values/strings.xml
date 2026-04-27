@@ -1,18 +1,32 @@
 <resources>
     <string name="app_name">Sensic</string>
-    <string name="Information">Sensic is a Context-Aware Music Application designed to take in your current contexts, such as your mood, location, weather and activity. Based on this information and your own preferences provided to the app, the music played will aim to be tailored towards what you want to hear in these given contexts.</string>
-    <string name="Instructions">"To tailor the experience to fit your tastes, you can start by editing contexts to align closer to what you'll want to hear. By providing this information, the application can build up an understanding of your listening preferences. Once you're satisfied with the edits you've made, you can tap 'Start Listening' in order to play recommended music."</string>
-    <string name="Disclaimer">"Please note that you require a pre-existing Spotify subscription in order to use this application. Due to this application accessing Spotify to get recommendations, you may need to authenticate. "</string>
-    <string name="title_activity_authentication">Authentication</string>
+    <string name="Information">Sensic is a Context-Aware Music Application designed to take in your current contexts, such as your mood, location, weather and activity. Based on this information and your own preferences provided to the app, the app will aim to generate recommendations geared towards what you want to hear in these given contexts.</string>
+    <string name="Instructions">"To tailor the experience to fit your tastes, you can start by personalising your contexts so that recommendations align closer to what you want to hear. By providing this information, the application can build up an understanding of your listening preferences. Once you're satisfied with the edits you've made, you can tap "Get Recommendations" in order to get songs that align with your genre choices."</string>
+    <string name="Disclaimer">"Please note that you require a pre-existing Spotify subscription in order to use this application. Due to this application accessing Spotify to get seeds to form the recommendations, you may need to authenticate your account. To make full use of the application, it's recommended that you enable location and activity services when prompted, but please also note that if you are in one of your saved location, the location name may be included in the playlist name upon creation."</string>
+
+    <string name="first_fragment_label">My first fragment</string>
+    <string name="second_fragment_label">My first fragment</string>
+
+   <string-array name="MoodNames">
+       <item>Happy</item>
+       <item>Sad</item>
+       <item>Anxious</item>
+       <item>Angry</item>
+       <item>Energetic</item>
+       <item>Exhausted</item>
+   </string-array>
 
     <string-array name="Genres">
-        <item>Genre1</item>
-        <item>Genre2</item>
-        <item>Genre3</item>
-        <item>Genre4</item>
-        <item>Genre5</item>
-        <item>Genre6</item>
-        <item>Genre7</item>
-        <item>Genre8</item>
+        <item>Chill</item>
+        <item>Classical</item>
+        <item>EDM</item>
+        <item>Folk</item>
+        <item>K-Pop</item>
+        <item>Lofi</item>
+        <item>Metal</item>
+        <item>Pop</item>
+        <item>Rock</item>
+        <item>Sleep</item>
     </string-array>
+    <string name="title_activity_get_recommendations">GetRecommendations</string>
 </resources>
