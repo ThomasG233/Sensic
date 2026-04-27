@@ -58,21 +58,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MusicPlayer"
-            android:exported="true"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="callback"
-                    android:scheme="sensic" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".MoodSelect"
             android:exported="true"
             android:screenOrientation="portrait" >
